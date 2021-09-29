@@ -3,6 +3,12 @@ version: '3.4'
 services:
     db:
         image: mysql:8
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        volumes:
+        volumes:
+            - .docker/data/db:/var/lib/mysql
+            - .docker/mysql/my.cnf:/etc/mysql/conf.d/conf-mysql.cnf:ro
         environment:
             - MYSQL_ROOT_PASSWORD=jdm
             - MYSQL_PASSWORD=jdm
@@ -50,6 +56,22 @@ services:
             - target: 443
               published: 443
               protocol: udp
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+          PMA_HOST: db
+          PMA_PORT: 3306
+        ports:
+            - 8080:80
+        links:
+            - db
+
+    mailer:
+        image: schickling/mailcatcher
+        ports:
+            - "1080:1080"
+            - "1025:25"
 
 volumes:
     php_socket:

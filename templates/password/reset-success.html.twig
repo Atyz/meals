@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe mis à jour{% endblock %}
+
+{% block body %}
+    <form method="post">
+        <h1>
+            Mot de passe mis à jour
+        </h1>
+
+        <p>
+            Votre mot de passe a bien été mis à jour.
+        </p>
+
+        <a href="{{ url('home') }}">
+            Retour à l'acceuil
+        </a>
+    </form>
+{% endblock %}

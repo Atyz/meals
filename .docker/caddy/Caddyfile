@@ -9,11 +9,14 @@
     }
 }
 
-
 localhost
 
-root * /srv/app/public
-push
-php_fastcgi unix//var/run/php/php-fpm.sock
-encode zstd gzip
-file_server
+log
+
+route {
+    root * /srv/app/public
+    push
+    php_fastcgi unix//var/run/php/php-fpm.sock
+    encode zstd gzip
+    file_server
+}

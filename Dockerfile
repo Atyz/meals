@@ -19,6 +19,7 @@ RUN apk add --no-cache \
 		git \
 		gnu-libiconv \
         bash \
+		yarn \
 	;
 
 # install gnu-libiconv and set LD_PRELOAD env to make iconv work fully on Alpine image.
@@ -35,7 +36,7 @@ RUN set -eux; \
 	; \
 	\
 	docker-php-ext-configure zip; \
-	docker-php-ext-install -j$(nproc) \
+	docker-php-ext-install -j"$(nproc)" \
 		intl \
 		zip \
 		pdo \

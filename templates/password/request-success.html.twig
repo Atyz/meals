@@ -3,17 +3,15 @@
 {% block title %}Lien de récupération envoyé{% endblock %}
 
 {% block body %}
-    <form method="post">
-        <h1 class="h3 mb-3 font-weight-normal">
-            Ca devrait vous aider !
-        </h1>
+    <h1 data-tf="request-success">
+        Ca devrait vous aider !
+    </h1>
 
-        <p>
-            Si votre email existe bien dans notre base de données, ue lien de récupération vous y a été envoyé.
-        </p>
+    <p>
+        Si votre email existe bien dans notre base de données, ue lien de récupération vous y a été envoyé.
+    </p>
 
-        <a href="{{ url('home') }}">
-            Retour à l'acceuil
-        </a>
-    </form>
+    <a href="{{ url('home') }}" data-tf="back">
+        Retour à l'acceuil
+    </a>
 {% endblock %}

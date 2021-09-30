@@ -12,6 +12,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PasswordManager
 {
+    public const RESET_ERROR_CODE_NOT_EXISTING = 1;
+    public const RESET_ERROR_CODE_EXPIRED = 2;
+
     private ManagerRegistry $doctrine;
     private EventDispatcherInterface $dispatcher;
 

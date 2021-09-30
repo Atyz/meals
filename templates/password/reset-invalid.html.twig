@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+    <h1 data-tf="reset-error">
+        Ce lien ne fonctionne pas
+    </h1>
+
+    <p>
+        Les liens de réinitialisation du mot de passe expirent sous 1 heure.
+    </p>
+
+    <p>
+        Ils expirent également 15 minutes après avoir cliqué sur le lien si vous n'avez pas réinitialisé votre mot de passe.
+    </p>
+
+    <p>
+        Si le lien ne fonctionne pas, <a href="{{ path('password_request') }}">vous pouvez en demander un autre</a>.
+    </p>
+
+    {% if code is not empty %}
+        <p class="text-center small kt-shape-font-color-2" data-tf="reset-error-code">
+            {{ code }}
+        </p>
+    {% endif %}
+
+    <a href="{{ url('home') }}" data-tf="back">
+        Retour à l'acceuil
+    </a>
+{% endblock %}

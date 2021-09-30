@@ -3,29 +3,29 @@
 {% block title %}Mot de passe oublié{% endblock %}
 
 {% block body %}
-    <form method="post">
-        <h1 class="h3 mb-3 font-weight-normal">
-            Mot de passe oublié
-        </h1>
+    <h1 class="h3 mb-3 font-weight-normal">
+        Mot de passe oublié
+    </h1>
 
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            <p>
-                Pour réinitialiser votre mot de passe, saisissez l'adresse e-mail
-                que vous utilisez pour vous connecter.
-            </p>
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate',
+        'data-tf':'request-form'
+    }}) }}
+        <p>
+            Pour réinitialiser votre mot de passe, saisissez l'adresse e-mail
+            que vous utilisez pour vous connecter.
+        </p>
 
-            {{ form_row(form.email, {'attr': { 'placeholder': 'Votre email' }}) }}
+        {{ form_row(form.email, {'attr': { 'placeholder': 'Votre email' }}) }}
 
-            <div>
-                <button type="submit">
-                    Obtenir le lien de réinitialisation
-                </button>
+        <div>
+            <button type="submit">
+                Obtenir le lien de réinitialisation
+            </button>
 
-                <a href="{{ url('home') }}">
-                    Retour
-                </a>
-            </div>
-        {{ form_end(form) }}
-
-    </form>
+            <a href="{{ url('home') }}" data-tf="back">
+                Retour
+            </a>
+        </div>
+    {{ form_end(form) }}
 {% endblock %}

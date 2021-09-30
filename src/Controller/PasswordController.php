@@ -44,7 +44,7 @@ class PasswordController extends AbstractController
     }
 
     /**
-     * @Route("/mot-de-passe/recuperation/succes", name="password_reset_success", methods={"GET"})
+     * @Route("/mot-de-passe/nouveau/succes", name="password_reset_success", methods={"GET"})
      */
     public function resetSuccess(): Response
     {
@@ -52,16 +52,19 @@ class PasswordController extends AbstractController
     }
 
     /**
-     * @Route("/mot-de-passe/recuperation/{token}", name="password_reset", methods={"GET", "POST"})
+     * @Route("/mot-de-passe/nouveau/{token}", name="password_reset", methods={"GET", "POST"})
      */
-    public function reset(Request $request, UserPassword $userPwd, PasswordManager $manager): Response
-    {
+    public function reset(
+        Request $request,
+        PasswordManager $manager,
+        ?UserPassword $userPwd = null
+    ): Response {
         if (null === $userPwd) {
-            return $this->redirectToRoute('invalid-token', ['code' => 1]);
+            return $this->render('password/reset-invalid.html.twig', ['code' => PasswordManager::RESET_ERROR_CODE_NOT_EXISTING]);
         }
 
         if (new \DateTime() > $userPwd->getExpireAt()) {
-            return $this->redirectToRoute('invalid-token', ['code' => 2]);
+            return $this->render('password/reset-invalid.html.twig', ['code' => PasswordManager::RESET_ERROR_CODE_EXPIRED]);
         }
 
         $manager->secureRequest($userPwd);

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eea52ec26482821f02bbe4c3e6eb0112",
+    "content-hash": "135b6780f2a2071aea1a360d059c6515",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -3420,16 +3420,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.16.2",
+            "version": "v1.16.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "f1e77e62bcb068bf094f4781eca1436ef818ff72"
+                "reference": "f05406b33681409b83285f4d2ff4efbca7c55b03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/f1e77e62bcb068bf094f4781eca1436ef818ff72",
-                "reference": "f1e77e62bcb068bf094f4781eca1436ef818ff72",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/f05406b33681409b83285f4d2ff4efbca7c55b03",
+                "reference": "f05406b33681409b83285f4d2ff4efbca7c55b03",
                 "shasum": ""
             },
             "require": {
@@ -3468,7 +3468,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.16.2"
+                "source": "https://github.com/symfony/flex/tree/v1.16.3"
             },
             "funding": [
                 {
@@ -3484,7 +3484,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-24T08:45:18+00:00"
+            "time": "2021-09-28T17:00:52+00:00"
         },
         {
             "name": "symfony/form",
@@ -4404,12 +4404,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "91a6bcca0e13d4182ebab28deabaef4eb03ca549"
+                "reference": "92bd02cc10c40605ff5b4cea88a2911e421aed6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/91a6bcca0e13d4182ebab28deabaef4eb03ca549",
-                "reference": "91a6bcca0e13d4182ebab28deabaef4eb03ca549",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/92bd02cc10c40605ff5b4cea88a2911e421aed6b",
+                "reference": "92bd02cc10c40605ff5b4cea88a2911e421aed6b",
                 "shasum": ""
             },
             "require": {
@@ -4478,7 +4478,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-18T09:57:40+00:00"
+            "time": "2021-09-28T20:54:22+00:00"
         },
         {
             "name": "symfony/notifier",

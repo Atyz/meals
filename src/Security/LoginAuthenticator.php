@@ -37,21 +37,23 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
-            [
-                new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),
-            ]
+            [new CsrfTokenBadge('authenticate', $request->get('_csrf_token'))]
         );
     }
 
+    /** {@inheritDoc} **/
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
+
+        if (null !== $targetPath) {
             return new RedirectResponse($targetPath);
         }
 
         return new RedirectResponse($this->urlGenerator->generate('home'));
     }
 
+    /** {@inheritDoc} **/
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);

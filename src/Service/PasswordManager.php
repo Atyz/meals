@@ -7,7 +7,6 @@ use App\Entity\UserPassword;
 use App\Event\AppEvents;
 use App\Event\UserEvent;
 use App\Event\UserPasswordRequestEvent;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -72,7 +71,6 @@ class PasswordManager
     public function reset(UserPassword $userPwd)
     {
         $user = $userPwd->getUser();
-        dump($user);
 
         $this->dispatcher->dispatch(
             new UserEvent($user),

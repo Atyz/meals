@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\UserPassword;
-use App\Form\PasswordRequestType;
-use App\Form\PasswordResetType;
+use App\Form\Password\RequestType as PasswordRequestType;
+use App\Form\Password\ResetType as PasswordResetType;
 use App\Service\PasswordManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,7 @@ class PasswordController extends AbstractController
     /**
      * @Route("/mot-de-passe/demande/succes", name="password_request_success", methods={"GET"})
      */
-    public function requestSuccess()
+    public function requestSuccess(): Response
     {
         return $this->render('password/request-success.html.twig');
     }
@@ -46,7 +46,7 @@ class PasswordController extends AbstractController
     /**
      * @Route("/mot-de-passe/recuperation/succes", name="password_reset_success", methods={"GET"})
      */
-    public function resetSuccess()
+    public function resetSuccess(): Response
     {
         return $this->render('password/reset-success.html.twig');
     }
@@ -54,7 +54,7 @@ class PasswordController extends AbstractController
     /**
      * @Route("/mot-de-passe/recuperation/{token}", name="password_reset", methods={"GET", "POST"})
      */
-    public function reset(Request $request, UserPassword $userPwd, PasswordManager $manager)
+    public function reset(Request $request, UserPassword $userPwd, PasswordManager $manager): Response
     {
         if (null === $userPwd) {
             return $this->redirectToRoute('invalid-token', ['code' => 1]);
@@ -66,9 +66,7 @@ class PasswordController extends AbstractController
 
         $manager->secureRequest($userPwd);
 
-        $user = $userPwd->getUser();
-
-        $form = $this->createForm(PasswordResetType::class, $user);
+        $form = $this->createForm(PasswordResetType::class, $userPwd->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

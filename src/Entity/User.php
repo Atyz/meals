@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,10 +19,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
      */
-    private int $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -48,12 +48,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private Collection $userPasswords;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Meal::class, mappedBy="user", orphanRemoval=true)
+     */
+    private Collection $meals;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Theme::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $themes;
+
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->userPasswords = new ArrayCollection();
+        $this->meals = new ArrayCollection();
+        $this->themes = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -70,20 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
     {
         return (string) $this->email;
     }
@@ -143,9 +143,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|UserPassword[]
-     */
     public function getUserPasswords(): Collection
     {
         return $this->userPasswords;
@@ -167,6 +164,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userPassword->getUser() === $this) {
                 $userPassword->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMeals(): Collection
+    {
+        return $this->meals;
+    }
+
+    public function addMeal(Meal $meal): self
+    {
+        if (!$this->meals->contains($meal)) {
+            $this->meals[] = $meal;
+            $meal->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeal(Meal $meal): self
+    {
+        if ($this->meals->removeElement($meal)) {
+            // set the owning side to null (unless already changed)
+            if ($meal->getUser() === $this) {
+                $meal->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Theme[]
+     */
+    public function getThemes(): Collection
+    {
+        return $this->themes;
+    }
+
+    public function addTheme(Theme $theme): self
+    {
+        if (!$this->themes->contains($theme)) {
+            $this->themes[] = $theme;
+            $theme->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTheme(Theme $theme): self
+    {
+        if ($this->themes->removeElement($theme)) {
+            // set the owning side to null (unless already changed)
+            if ($theme->getUser() === $this) {
+                $theme->setUser(null);
             }
         }
 

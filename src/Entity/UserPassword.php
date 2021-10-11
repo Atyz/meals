@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserPasswordRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=UserPasswordRepository::class)
@@ -12,28 +13,32 @@ class UserPassword
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
      */
-    private $id;
+    private Uuid $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userPasswords")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $token;
+    private string $token;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $expireAt;
+    private \DateTime $expireAt;
 
-    public function getId(): ?int
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
+
+    public function getId(): Uuid
     {
         return $this->id;
     }

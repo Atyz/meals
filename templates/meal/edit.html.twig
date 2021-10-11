@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes plats{% endblock %}
+
+{% block body %}
+    <h1 data-tf="meal.edit">
+        Modifier mon plat
+    </h1>
+
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate',
+        'data-tf': 'meal.form'
+    }}) }}
+        {% include 'meal/form.html.twig' %}
+
+        <button type="submit" class="btn btn-primary">
+            Modifier ce plat
+        </button>
+
+        <a href="{{ url('meal') }}" class="btn btn-secondary">
+            Retour
+        </a>
+    {{ form_end(form) }}
+{% endblock %}

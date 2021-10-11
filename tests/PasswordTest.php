@@ -122,18 +122,12 @@ class PasswordTest extends WebTestCase
 
         $form = $crawler->filter('[data-tf="reset-form"]')->form();
         $this->client->submit($form);
-        $this->assertSelectorTextContains(
-            '#reset_plainPassword_first_errors .form-error-message',
-            'Cette valeur ne doit pas être vide.'
-        );
+        $this->assertSelectorTextContains('#reset_plainPassword_first_error .invalid-feedback', 'Cette valeur ne doit pas être vide.');
 
         $form['reset[plainPassword][first]'] = '456';
         $form['reset[plainPassword][second]'] = '123';
         $this->client->submit($form);
-        $this->assertSelectorTextContains(
-            '#reset_plainPassword_first_errors .form-error-message',
-            'Les mots de passe doivent être identiques.'
-        );
+        $this->assertSelectorTextContains('#reset_plainPassword_first_error .invalid-feedback', 'Les mots de passe doivent être identiques.');
 
         $form['reset[plainPassword][first]'] = '456';
         $form['reset[plainPassword][second]'] = '456';

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes plats{% endblock %}
+
+{% block body %}
+    <h1 data-tf="meal.list">
+        Mes plats
+    </h1>
+
+    <a href="{{ url('meal_new') }}" class="btn btn-primary">
+        Je crée un nouveau plat
+    </a>
+    <a href="{{ url('home') }}" class="btn btn-secondary">
+        Retour
+    </a>
+
+    <ul>
+        {% for meal in meals %}
+            <li data-tf="meal.item">
+                <span data-tf="meal.item.name">{{ meal.name }}</span> /
+                <span data-tf="meal.item.preparation">{{ meal.preparationLabel }}</span> /
+                <span data-tf="meal.item.recurrence">{{ meal.recurrenceLabel }}</span> /
+                <span data-tf="meal.item.ingredients">{{ meal.ingredients|map(ing => ing.name)|join(', ') }}</span> /
+                <span data-tf="meal.item.themes">{{ meal.themes|map(the => the.name)|join(', ') }}</span> |
+                <a href="{{ url('meal_edit', { id: meal.id }) }}" class="btn btn-warning">Modifier</a>
+                <a href="{{ url('meal_del', { id: meal.id }) }}" class="btn btn-danger">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

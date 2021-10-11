@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\UserPassword;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class UserPasswordFixtures extends Fixture
+class UserPasswordFixtures extends Fixture implements DependentFixtureInterface
 {
     public const REQUEST_TOKEN_VALID = 'valid';
     public const REQUEST_TOKEN_EXPIRED = 'expired';
@@ -30,5 +31,12 @@ class UserPasswordFixtures extends Fixture
         $manager->persist($validRequest);
         $manager->persist($expiredRequest);
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class,
+        ];
     }
 }

@@ -3,7 +3,17 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <div class="mb-3">
-        Bienvenue {{ app.user.username }}, <a href="{{ path('logout') }}">Logout</a>
+    <h1 data-tf="home">
+        1000 <br />
+        MEALS
+    </h1>
+
+    <div>
+        <a href="{{ url('meal') }}">Mes plats</a> |
+        <a href="{{ path('logout') }}">Logout</a>
+    </div>
+
+    <div>
+        Bienvenue {{ app.user.email }}
     </div>
 {% endblock %}

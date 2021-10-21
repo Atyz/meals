@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ThemeRepository::class)
@@ -27,6 +28,8 @@ class Theme
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Merci de donner un nom à votre thème.")
+     * @Assert\Length(max=255, maxMessage="Le nom de votre thème ne peut pas faire plus de 255 caractères.")
      */
     private string $name;
 

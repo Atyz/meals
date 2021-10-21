@@ -29,4 +29,13 @@ class ThemeRepository extends ServiceEntityRepository
                 ->setParameter('user', $user->getId(), 'uuid')
         ;
     }
+
+    public function findForUser(User $user): array
+    {
+        return $this
+            ->findForUserQuery($user)
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }

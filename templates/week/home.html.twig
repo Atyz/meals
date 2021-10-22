@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes semaines types{% endblock %}
+
+{% block body %}
+    <h1 data-tf="week.list">
+        Mes semaines types
+    </h1>
+
+    <a href="{{ url('week_new') }}" class="btn btn-primary">
+        Je crée une nouvelle semaine type
+    </a>
+    <a href="{{ url('home') }}" class="btn btn-secondary">
+        Retour
+    </a>
+
+    <ul>
+        {% for week in weeks %}
+            <li data-tf="week.item">
+                <span data-tf="week.item.name">{{ week.name }}</span> /
+                <a href="{{ url('week_edit', { id: week.id }) }}" class="btn btn-warning">Modifier</a>
+                <a href="{{ url('week_del', { id: week.id }) }}" class="btn btn-danger">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

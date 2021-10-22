@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes semaines types{% endblock %}
+
+{% block body %}
+    <h1 data-tf="week.new">
+        Ma nouvelle semaine type
+    </h1>
+
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate',
+        'data-tf': 'week.form'
+    }}) }}
+        {% include 'week/form.html.twig' %}
+
+        <button type="submit" class="btn btn-primary">
+            Ajouter cette semaine type
+        </button>
+
+        <a href="{{ url('week') }}" class="btn btn-secondary">
+            Retour
+        </a>
+    {{ form_end(form, { 'render_rest': false }) }}
+{% endblock %}

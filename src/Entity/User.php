@@ -58,12 +58,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $themes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Week::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $weeks;
+
     public function __construct()
     {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::v6();
         $this->userPasswords = new ArrayCollection();
         $this->meals = new ArrayCollection();
         $this->themes = new ArrayCollection();
+        $this->weeks = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -221,6 +227,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($theme->getUser() === $this) {
                 $theme->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Week[]
+     */
+    public function getWeeks(): Collection
+    {
+        return $this->weeks;
+    }
+
+    public function addWeek(Week $week): self
+    {
+        if (!$this->weeks->contains($week)) {
+            $this->weeks[] = $week;
+            $week->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWeek(Week $week): self
+    {
+        if ($this->weeks->removeElement($week)) {
+            // set the owning side to null (unless already changed)
+            if ($week->getUser() === $this) {
+                $week->setUser(null);
             }
         }
 

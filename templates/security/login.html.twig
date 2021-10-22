@@ -3,13 +3,17 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
+<h1>
+    1000 MEALS
+</h1>
+
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     <h1 class="h3 mb-3 font-weight-normal">
-        Connexion
+        Connectez-vous !
     </h1>
 
     <div>

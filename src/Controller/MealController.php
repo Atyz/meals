@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MealsController extends AbstractController
+class MealController extends AbstractController
 {
     /**
      * @Route("/mes-plats", name="meal")
@@ -66,7 +66,7 @@ class MealsController extends AbstractController
     /**
      * @Route("/mes-plats/supprimer/{id}", name="meal_del")
      */
-    public function del(Request $request, Meal $meal, MealManager $manager)
+    public function del(Meal $meal, MealManager $manager)
     {
         $manager->del($meal);
 

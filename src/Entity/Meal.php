@@ -74,7 +74,7 @@ class Meal
 
     public function __construct()
     {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::v6();
         $this->ingredients = new ArrayCollection();
         $this->themes = new ArrayCollection();
     }

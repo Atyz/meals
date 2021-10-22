@@ -1,0 +1,23 @@
+{{ form_widget(form._token) }}
+{{ form_row(form.name, {'label': 'Nom'}) }}
+
+<div class="row">
+    <h3>
+        Repas
+    </h3>
+
+    {{ form_errors(form) }}
+
+    {% for day in form.days %}
+        <div class="col-6">
+            <h3>
+                {{ day.vars.value.dayLabel }} /
+                {{ day.vars.value.timeLabel }}
+            </h3>
+
+            {{ form_row(day.themes) }}
+            {{ form_row(day.preparations) }}
+            {{ form_row(day.used) }}
+        </div>
+    {% endfor %}
+</div>

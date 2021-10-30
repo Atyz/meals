@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Meal;
+use App\Entity\Theme;
 use App\Entity\User;
 use App\Entity\WeekDay;
 use DateTime;
@@ -56,7 +57,7 @@ class MealRepository extends ServiceEntityRepository
         ;
 
         if (0 < count($excluded)) {
-            $ids = array_map(function ($meal) {
+            $ids = array_map(function (Meal $meal) {
                 return $meal->getId()->toBinary();
             }, $excluded);
 
@@ -67,7 +68,7 @@ class MealRepository extends ServiceEntityRepository
         }
 
         if (0 < count($weekDay->getThemes())) {
-            $ids = $weekDay->getThemes()->map(function ($theme) {
+            $ids = $weekDay->getThemes()->map(function (Theme $theme) {
                 return $theme->getId()->toBinary();
             });
 

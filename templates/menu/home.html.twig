@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h1 data-tf="home">
+        1000 <br />
+        MEALS
+    </h1>
+
+    <div>
+        <a href="{{ url('meal') }}">Mes plats</a> |
+        <a href="{{ url('week') }}">Mes semaines types</a> |
+        <a href="{{ url('theme') }}">Mes thèmes</a> |
+        <a href="{{ path('logout') }}">Logout</a>
+    </div>
+
+    <div>
+        Bienvenue {{ app.user.email }}
+    </div>
+
+    {% if null == menu %}
+        <div data-tf="menu.none">
+            Aucune semaine n'est encore générée !
+        </div>
+    {% else %}
+        <h2 data-tf="menu.now">
+            Qu'est ce qu'on mange cette semaine ?
+        </h2>
+
+        {% for day in menu.days %}
+            <div data-tf="menu.item">
+                <h3>
+                    {{ day.dayLabel }} : {{ day.timeLabel }}
+                </h3>
+                <div>
+                    {{ null != day.meal ? day.meal.name : 'Aucun repas sélectionné !' }}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div>
+        <a href="{{ url('menu_generate') }}" data-tf="menu.link">
+            Générer une semaine
+        </a>
+    </div>
+
+{% endblock %}

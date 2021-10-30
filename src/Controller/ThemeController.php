@@ -49,7 +49,6 @@ class ThemeController extends AbstractController
     public function edit(Request $request, Theme $theme, ThemeManager $manager)
     {
         $form = $this->createForm(ThemeType::class, $theme);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

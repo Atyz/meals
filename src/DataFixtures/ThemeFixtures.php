@@ -15,25 +15,40 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
     public const THEME_DIET_UUID = '1e8a5b79-9bdc-4fe4-a1b1-057860f7e664';
     public const THEME_BDIET_UUID = '1ec2a974-5918-64fe-b371-bbd0b70daf85';
 
+    public const THEME_DIET_REF = 'theme.diet';
+    public const THEME_BDIET_REF = 'theme.bdiet';
+
     public function load(ObjectManager $manager): void
     {
         $atyz = $this->getReference(UserFixtures::ATYZ_USER_REF);
         $user = $this->getReference(UserFixtures::USER_USER_REF);
 
         $themes = [
-            'Diète maigre' => self::THEME_DIET_UUID,
-            'Diète grasse' => self::THEME_BDIET_UUID,
+            'Diète maigre' => [
+                'uuid' => self::THEME_DIET_UUID,
+                'ref' => self::THEME_DIET_REF,
+            ],
+            'Diète grasse' => [
+                'uuid' => self::THEME_BDIET_UUID,
+                'ref' => self::THEME_BDIET_REF,
+            ],
             'Vegétarien' => null,
             'Junk' => null,
         ];
 
-        foreach ($themes as $themeName => $uuid) {
+        foreach ($themes as $name => $data) {
+            $uuid = null !== $data ? $data['uuid'] : null;
+
             $theme = (new Theme($uuid))
                 ->setUser($atyz)
-                ->setName($themeName)
+                ->setName($name)
             ;
 
             $manager->persist($theme);
+
+            if (null !== $data) {
+                $this->addReference($data['ref'], $theme);
+            }
         }
 
         $themes = [
@@ -43,10 +58,10 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
             'Jeûne',
         ];
 
-        foreach ($themes as $themeName) {
+        foreach ($themes as $name) {
             $theme = (new Theme())
                 ->setUser($user)
-                ->setName($themeName)
+                ->setName($name)
             ;
 
             $manager->persist($theme);

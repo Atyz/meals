@@ -12,34 +12,13 @@ use Symfony\Component\Uid\Uuid;
  * @ORM\Entity(repositoryClass=WeekDayRepository::class)
  * @ORM\HasLifecycleCallbacks()
  */
-class WeekDay
+class WeekDay extends Day
 {
-    private const MONDAY = 1;
-    private const TUESDAY = 2;
-    private const WEDNESDAY = 3;
-    private const THURSDAY = 4;
-    private const FRIDAY = 5;
-    private const SATURDAY = 6;
-    private const SUNDAY = 7;
-
-    private const TIME_LUNCH = 1;
-    private const TIME_DINNER = 2;
-
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      */
     private ?Uuid $id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private int $day;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private int $time;
 
     /**
      * @ORM\Column(type="boolean")
@@ -71,65 +50,6 @@ class WeekDay
     public function getId(): Uuid
     {
         return $this->id;
-    }
-
-    public function getDay(): ?int
-    {
-        return $this->day;
-    }
-
-    public function setDay(int $day): self
-    {
-        $this->day = $day;
-
-        return $this;
-    }
-
-    public static function getDays(): array
-    {
-        return [
-            self::MONDAY => 'lundi',
-            self::TUESDAY => 'mardi',
-            self::WEDNESDAY => 'mercredi',
-            self::THURSDAY => 'jeudi',
-            self::FRIDAY => 'vendredi',
-            self::SATURDAY => 'samedi',
-            self::SUNDAY => 'dimanche',
-        ];
-    }
-
-    public function getDayLabel()
-    {
-        $labels = self::getDays();
-
-        return $labels[$this->getDay()] ?? '-';
-    }
-
-    public function getTime(): ?int
-    {
-        return $this->time;
-    }
-
-    public function setTime(int $time): self
-    {
-        $this->time = $time;
-
-        return $this;
-    }
-
-    public static function getTimes(): array
-    {
-        return [
-            self::TIME_LUNCH => 'déjeuner',
-            self::TIME_DINNER => 'dînner',
-        ];
-    }
-
-    public function getTimeLabel()
-    {
-        $labels = self::getTimes();
-
-        return $labels[$this->getTime()] ?? '-';
     }
 
     public function isUsed(): bool

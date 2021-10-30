@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Entity\Week;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,12 +21,19 @@ class WeekRepository extends ServiceEntityRepository
         parent::__construct($registry, Week::class);
     }
 
-    public function findForUser(User $user): array
+    public function findForUserQuery(User $user): QueryBuilder
     {
         return $this
             ->createQueryBuilder('w')
             ->andWhere('w.user = :user')
                 ->setParameter(':user', $user->getId(), 'uuid')
+        ;
+    }
+
+    public function findForUser(User $user): array
+    {
+        return $this
+            ->findForUserQuery($user)
             ->getQuery()
             ->execute()
         ;

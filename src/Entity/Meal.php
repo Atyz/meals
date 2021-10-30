@@ -72,6 +72,11 @@ class Meal
      */
     private Collection $themes;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private ?\DateTimeInterface $lastUseAt;
+
     public function __construct()
     {
         $this->id = Uuid::v6();
@@ -214,6 +219,18 @@ class Meal
         if ($this->themes->removeElement($theme)) {
             $theme->removeMeal($this);
         }
+
+        return $this;
+    }
+
+    public function getLastUseAt(): ?\DateTimeInterface
+    {
+        return $this->lastUseAt;
+    }
+
+    public function setLastUseAt(?\DateTimeInterface $lastUseAt): self
+    {
+        $this->lastUseAt = $lastUseAt;
 
         return $this;
     }

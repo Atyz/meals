@@ -63,6 +63,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $weeks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Menu::class, mappedBy="user")
+     */
+    private $menus;
+
     public function __construct()
     {
         $this->id = Uuid::v6();
@@ -70,6 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->meals = new ArrayCollection();
         $this->themes = new ArrayCollection();
         $this->weeks = new ArrayCollection();
+        $this->menus = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -257,6 +263,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($week->getUser() === $this) {
                 $week->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Menu[]
+     */
+    public function getMenus(): Collection
+    {
+        return $this->menus;
+    }
+
+    public function addMenu(Menu $menu): self
+    {
+        if (!$this->menus->contains($menu)) {
+            $this->menus[] = $menu;
+            $menu->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMenu(Menu $menu): self
+    {
+        if ($this->menus->removeElement($menu)) {
+            // set the owning side to null (unless already changed)
+            if ($menu->getUser() === $this) {
+                $menu->setUser(null);
             }
         }
 

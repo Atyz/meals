@@ -36,14 +36,20 @@ class Week
     private ?User $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=WeekDay::class, mappedBy="week", orphanRemoval=true, cascade={"persist"})/**
+     * @ORM\OneToMany(targetEntity=WeekDay::class, mappedBy="week", orphanRemoval=true, cascade={"persist"})
      */
     private Collection $days;
 
-    public function __construct()
+    /**
+     * @ORM\OneToMany(targetEntity=Menu::class, mappedBy="week", orphanRemoval=true)
+     */
+    private $menus;
+
+    public function __construct(?string $uuid = null)
     {
-        $this->id = Uuid::v6();
+        $this->id = null !== $uuid ? Uuid::fromString($uuid) : Uuid::v6();
         $this->days = new ArrayCollection();
+        $this->menus = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -127,5 +133,35 @@ class Week
                 ->addViolation()
             ;
         }
+    }
+
+    /**
+     * @return Collection|Menu[]
+     */
+    public function getMenus(): Collection
+    {
+        return $this->menus;
+    }
+
+    public function addMenu(Menu $menu): self
+    {
+        if (!$this->menus->contains($menu)) {
+            $this->menus[] = $menu;
+            $menu->setWeek($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMenu(Menu $menu): self
+    {
+        if ($this->menus->removeElement($menu)) {
+            // set the owning side to null (unless already changed)
+            if ($menu->getWeek() === $this) {
+                $menu->setWeek(null);
+            }
+        }
+
+        return $this;
     }
 }

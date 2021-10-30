@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Générer un menu pour cette semaine{% endblock %}
+
+{% block body %}
+    <h1 data-tf="menu.generate">
+        Générer un menu pour cette semaine
+    </h1>
+
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate',
+        'data-tf': 'menu.form'
+    }}) }}
+        {{ form_row(form.week, {'label': 'Semaine type'}) }}
+        {{ form_row(form.date, {'label': 'Semaine à générer'}) }}
+
+        <button type="submit" class="btn btn-primary">
+            Générer
+        </button>
+
+        <a href="{{ url('home') }}" class="btn btn-secondary">
+            Retour
+        </a>
+    {{ form_end(form) }}
+{% endblock %}

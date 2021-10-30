@@ -33,7 +33,7 @@ class MealTest extends WebTestCase
         $this->client->loginUser($atyz);
     }
 
-    public function testMealAccess(): void
+    public function testAccess(): void
     {
         $this->databaseTool->loadFixtures([
             'App\DataFixtures\UserFixtures',
@@ -53,7 +53,7 @@ class MealTest extends WebTestCase
         $this->assertSelectorExists('[data-tf="home"]');
     }
 
-    public function testMealNavigation(): void
+    public function testNavigation(): void
     {
         $this->login();
 
@@ -67,7 +67,7 @@ class MealTest extends WebTestCase
         $this->assertSelectorExists('[data-tf="meal.list"]');
     }
 
-    public function testMealValidation(): void
+    public function testValidation(): void
     {
         $this->login();
 
@@ -125,7 +125,7 @@ class MealTest extends WebTestCase
         $this->assertSelectorTextContains('[data-tf="meal.item.themes"]', 'Diète maigre');
     }
 
-    public function testMealEdition(): void
+    public function testEdition(): void
     {
         $this->login();
 
@@ -165,7 +165,7 @@ class MealTest extends WebTestCase
         $this->assertSelectorTextContains('[data-tf="meal.item.themes"]', 'Diète grasse');
     }
 
-    public function testMealDel(): void
+    public function testDel(): void
     {
         $this->login();
 

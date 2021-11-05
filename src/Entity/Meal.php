@@ -6,11 +6,18 @@ use App\Repository\MealRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MealRepository::class)
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(
+ *      fields={"user", "token"},
+ *      message="Un plat contenant ces ingrédients existe déjà.",
+ *      errorPath="ingredients"
+ * )
  */
 class Meal
 {
@@ -76,6 +83,11 @@ class Meal
      * @ORM\Column(type="date", nullable=true)
      */
     private ?\DateTimeInterface $lastUseAt;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $token;
 
     public function __construct()
     {
@@ -181,7 +193,7 @@ class Meal
     {
         if (!$this->ingredients->contains($ingredient)) {
             $this->ingredients[] = $ingredient;
-            $ingredient->addMeal($this);
+            // $ingredient->addMeal($this);
         }
 
         return $this;
@@ -208,7 +220,6 @@ class Meal
     {
         if (!$this->themes->contains($theme)) {
             $this->themes[] = $theme;
-            $theme->addMeal($this);
         }
 
         return $this;
@@ -231,6 +242,18 @@ class Meal
     public function setLastUseAt(?\DateTimeInterface $lastUseAt): self
     {
         $this->lastUseAt = $lastUseAt;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

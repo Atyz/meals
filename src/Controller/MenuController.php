@@ -7,6 +7,7 @@ use App\Form\Menu\MenuType;
 use App\Service\MenuService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MenuController extends AbstractController
@@ -14,7 +15,7 @@ class MenuController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home(MenuService $service)
+    public function home(MenuService $service): Response
     {
         return $this->render('menu/home.html.twig', [
             'menu' => $service->findCurrent($this->getUser()),
@@ -24,7 +25,7 @@ class MenuController extends AbstractController
     /**
      * @Route("/menu/generer-un-menu", name="menu_generate")
      */
-    public function generate(Request $request, MenuService $service)
+    public function generate(Request $request, MenuService $service): Response
     {
         $menu = (new Menu())->setUser($this->getUser());
         $form = $this->createForm(MenuType::class, $menu);

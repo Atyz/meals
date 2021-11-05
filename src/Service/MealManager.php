@@ -7,6 +7,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class MealManager
 {
+    private ManagerRegistry $doctrine;
+
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;

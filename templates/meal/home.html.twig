@@ -10,9 +10,48 @@
     <a href="{{ url('meal_new') }}" class="btn btn-primary">
         Je crée un nouveau plat
     </a>
+    <a href="{{ url('meal_generate') }}" class="btn btn-primary">
+        Je génère plusieurs plats en choisissant les ingrédients
+    </a>
     <a href="{{ url('home') }}" class="btn btn-secondary">
         Retour
     </a>
+
+    {% if null != generateds %}
+        {% if 0 < generateds.err|length %}
+            <div class="alert alert-warning" data-tf="meal.gen.warn">
+                <h4 class="alert-heading">Les plats suivants n'ont pas pu être ajoutés :</h4>
+
+                {% for mealName, errors in generateds.err %}
+                    <div data-tf="meal.gen.warn.item">
+                        <strong data-tf="meal.gen.warn.item.name">
+                            {{ mealName }} :
+                        </strong>
+                        <span data-tf="meal.gen.warn.item.err">
+                            {% for error in errors %}
+                                {{ error.message }}
+                                {{ loop.last ? '' : ', ' }}
+                            {% endfor %}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if 0 < generateds.meals|length %}
+            <div class="alert alert-success" data-tf="meal.gen.succ">
+                <h4 class="alert-heading">Les plats suivants ont bien été créés</h4>
+
+                {% for meal in generateds.meals %}
+                    <div data-tf="meal.gen.succ.item">
+                        <strong data-tf="meal.gen.succ.item.name">
+                            {{ meal.name }}
+                        </strong>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
 
     <ul>
         {% for meal in meals %}

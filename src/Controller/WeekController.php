@@ -8,6 +8,7 @@ use App\Service\WeekManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class WeekController extends AbstractController
@@ -15,7 +16,7 @@ class WeekController extends AbstractController
     /**
      * @Route("/mes-semaines-types", name="week")
      */
-    public function home(ManagerRegistry $doctrine)
+    public function home(ManagerRegistry $doctrine): Response
     {
         return $this->render('week/home.html.twig', [
             'weeks' => $doctrine->getRepository(Week::class)->findForUser($this->getUser()),
@@ -25,7 +26,7 @@ class WeekController extends AbstractController
     /**
      * @Route("/mes-semaines-types/nouvelle", name="week_new")
      */
-    public function new(Request $request, WeekManager $manager)
+    public function new(Request $request, WeekManager $manager): Response
     {
         $week = (new Week())->setUser($this->getUser());
         $form = $this->createForm(WeekType::class, $week);
@@ -45,7 +46,7 @@ class WeekController extends AbstractController
     /**
      * @Route("/mes-semaines-types/modifier/{id}", name="week_edit")
      */
-    public function edit(Request $request, Week $week, WeekManager $manager)
+    public function edit(Request $request, Week $week, WeekManager $manager): Response
     {
         $form = $this->createForm(WeekType::class, $week);
         $form->handleRequest($request);
@@ -64,7 +65,7 @@ class WeekController extends AbstractController
     /**
      * @Route("/mes-semaines-types/supprimer/{id}", name="week_del")
      */
-    public function del(Week $week, WeekManager $manager)
+    public function del(Week $week, WeekManager $manager): Response
     {
         $manager->del($week);
 

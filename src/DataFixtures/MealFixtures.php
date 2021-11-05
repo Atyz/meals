@@ -3,12 +3,20 @@
 namespace App\DataFixtures;
 
 use App\Entity\Meal;
+use App\Service\MealService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class MealFixtures extends Fixture implements DependentFixtureInterface
 {
+    private MealService $service;
+
+    public function __construct(MealService $service)
+    {
+        $this->service = $service;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $atyz = $this->getReference(UserFixtures::ATYZ_USER_REF);
@@ -23,43 +31,47 @@ class MealFixtures extends Fixture implements DependentFixtureInterface
 
         $meal = (new Meal())
             ->setUser($atyz)
-            ->setName('Poulet Pâtes')
+            ->setName('Pâtes Escalope de poulet')
             ->setPreparation(Meal::PREP_EXPRESS)
             ->addIngredient($chicken)
             ->addIngredient($pasta)
             ->addTheme($diet)
         ;
+        $this->service->setToken($meal);
         $manager->persist($meal);
 
         $meal = (new Meal())
             ->setUser($atyz)
-            ->setName('Poulet Riz')
+            ->setName('Riz Escalope de poulet')
             ->setPreparation(Meal::PREP_EXPRESS)
             ->addIngredient($chicken)
             ->addIngredient($rice)
             ->addTheme($diet)
         ;
+        $this->service->setToken($meal);
         $manager->persist($meal);
 
         $meal = (new Meal())
             ->setUser($atyz)
-            ->setName('Steak Pâtes')
+            ->setName('Pâtes Steak haché')
             ->setPreparation(Meal::PREP_EXPRESS)
             ->addIngredient($steak)
             ->addIngredient($pasta)
             ->addTheme($bdiet)
         ;
+        $this->service->setToken($meal);
         $manager->persist($meal);
 
-        $meal = (new Meal())
-            ->setUser($atyz)
-            ->setName('Steak Riz')
-            ->setPreparation(Meal::PREP_EXPRESS)
-            ->addIngredient($steak)
-            ->addIngredient($rice)
-            ->addTheme($bdiet)
-        ;
-        $manager->persist($meal);
+        // $meal = (new Meal())
+        //     ->setUser($atyz)
+        //     ->setName('Steak Riz')
+        //     ->setPreparation(Meal::PREP_EXPRESS)
+        //     ->addIngredient($steak)
+        //     ->addIngredient($rice)
+        //     ->addTheme($bdiet)
+        // ;
+        // $this->service->setToken($meal);
+        // $manager->persist($meal);
 
         $manager->flush();
     }

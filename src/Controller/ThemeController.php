@@ -8,6 +8,7 @@ use App\Service\ThemeManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ThemeController extends AbstractController
@@ -25,7 +26,7 @@ class ThemeController extends AbstractController
     /**
      * @Route("/mes-themes/nouveau", name="theme_new")
      */
-    public function new(Request $request, ThemeManager $manager)
+    public function new(Request $request, ThemeManager $manager): Response
     {
         $theme = (new Theme())->setUser($this->getUser());
         $form = $this->createForm(ThemeType::class, $theme);
@@ -46,7 +47,7 @@ class ThemeController extends AbstractController
     /**
      * @Route("/mes-themes/modifier/{id}", name="theme_edit")
      */
-    public function edit(Request $request, Theme $theme, ThemeManager $manager)
+    public function edit(Request $request, Theme $theme, ThemeManager $manager): Response
     {
         $form = $this->createForm(ThemeType::class, $theme);
         $form->handleRequest($request);

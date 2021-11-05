@@ -193,7 +193,6 @@ class Meal
     {
         if (!$this->ingredients->contains($ingredient)) {
             $this->ingredients[] = $ingredient;
-            // $ingredient->addMeal($this);
         }
 
         return $this;

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma liste de courses{% endblock %}
+
+{% block body %}
+    <h1 data-tf="shopping.list">
+        Ma liste de courses
+    </h1>
+
+    <a href="{{ url('home') }}" class="btn btn-secondary">
+        Retour
+    </a>
+
+    <ul>
+        {% for shopping in shoppings %}
+            <li data-tf="shopping.item">
+                <span>{{ shopping.ingredient.name }}</span>
+                {% if shopping.isToTake %}
+                    <a href="{{ url('shopping_take', { shopping: shopping.id }) }}" data-tf="shopping.take">Take</a>
+                {% else %}
+                    <a href="{{ url('shopping_untake', { shopping: shopping.id }) }}" data-tf="shopping.untake">Untake</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

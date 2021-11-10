@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ingredient;
+use App\Entity\Menu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,16 @@ class IngredientRepository extends ServiceEntityRepository
         parent::__construct($registry, Ingredient::class);
     }
 
-    // /**
-    //  * @return Ingredient[] Returns an array of Ingredient objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findForMenuInShopping(Menu $menu)
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
+        return $this
+            ->createQueryBuilder('i')
+            ->innerJoin('i.shoppings', 's')
+            ->innerJoin('s.menu', 'm')
+            ->andWhere('m.id = :menu')
+                ->setParameter('menu', $menu->getId(), 'uuid')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Ingredient
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -10,6 +10,10 @@ use Doctrine\Persistence\ObjectManager;
 
 class MealFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const MEAL_PASTA_CHICKEN_REF = 'meal.pasta.chicken';
+    public const MEAL_RICE_CHICKEN_REF = 'meal.rice.chicken';
+    public const MEAL_PASTA_STEAK_REF = 'meal.pasta.steak';
+
     private MealService $service;
 
     public function __construct(MealService $service)
@@ -39,6 +43,7 @@ class MealFixtures extends Fixture implements DependentFixtureInterface
         ;
         $this->service->setToken($meal);
         $manager->persist($meal);
+        $this->addReference(self::MEAL_PASTA_CHICKEN_REF, $meal);
 
         $meal = (new Meal())
             ->setUser($atyz)
@@ -50,6 +55,7 @@ class MealFixtures extends Fixture implements DependentFixtureInterface
         ;
         $this->service->setToken($meal);
         $manager->persist($meal);
+        $this->addReference(self::MEAL_RICE_CHICKEN_REF, $meal);
 
         $meal = (new Meal())
             ->setUser($atyz)
@@ -61,17 +67,7 @@ class MealFixtures extends Fixture implements DependentFixtureInterface
         ;
         $this->service->setToken($meal);
         $manager->persist($meal);
-
-        // $meal = (new Meal())
-        //     ->setUser($atyz)
-        //     ->setName('Steak Riz')
-        //     ->setPreparation(Meal::PREP_EXPRESS)
-        //     ->addIngredient($steak)
-        //     ->addIngredient($rice)
-        //     ->addTheme($bdiet)
-        // ;
-        // $this->service->setToken($meal);
-        // $manager->persist($meal);
+        $this->addReference(self::MEAL_PASTA_STEAK_REF, $meal);
 
         $manager->flush();
     }

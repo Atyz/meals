@@ -39,10 +39,16 @@ class Menu
      */
     private $days;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Shopping::class, mappedBy="menu", orphanRemoval=true)
+     */
+    private $shoppings;
+
     public function __construct(?string $uuid = null)
     {
         $this->id = null !== $uuid ? Uuid::fromString($uuid) : Uuid::v6();
         $this->days = new ArrayCollection();
+        $this->shoppings = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -106,6 +112,31 @@ class Menu
         if ($this->days->removeElement($day)) {
             if ($day->getMenu() === $this) {
                 $day->setMenu(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getShoppings(): Collection
+    {
+        return $this->shoppings;
+    }
+
+    public function addShopping(Shopping $shopping): self
+    {
+        if (!$this->shoppings->contains($shopping)) {
+            $this->shoppings[] = $shopping;
+        }
+
+        return $this;
+    }
+
+    public function removeShopping(Shopping $shopping): self
+    {
+        if ($this->shoppings->removeElement($shopping)) {
+            if ($shopping->getMenu() === $this) {
+                $shopping->setMenu(null);
             }
         }
 

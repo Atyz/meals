@@ -29,10 +29,16 @@ class Ingredient
      */
     private Collection $meals;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Shopping::class, mappedBy="ingredient")
+     */
+    private Collection $shoppings;
+
     public function __construct(?string $uuid = null)
     {
         $this->id = null !== $uuid ? Uuid::fromString($uuid) : Uuid::v6();
         $this->meals = new ArrayCollection();
+        $this->shoppings = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -74,5 +80,10 @@ class Ingredient
         }
 
         return $this;
+    }
+
+    public function getShoppings(): Collection
+    {
+        return $this->shoppings;
     }
 }

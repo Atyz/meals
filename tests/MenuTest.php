@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MenuTest extends WebTestCase
 {
+    use MenuTestTrait;
+
     private KernelBrowser $client;
     protected AbstractDatabaseTool $databaseTool;
 
@@ -93,16 +95,8 @@ class MenuTest extends WebTestCase
     {
         $this->login();
 
-        $this->client->request('GET', '/');
-        $crawler = $this->client->clickLink('Générer une semaine');
-        $form = $crawler->filter('[data-tf="menu.form"]')->form();
+        $crawler = $this->regenerateCurrentMenu();
 
-        $form['menu[week]'] = WeekFixtures::WEEK_CLASSIC_UUID;
-        $form['menu[date]'] = 0;
-        $this->client->submit($form);
-        $this->assertResponseRedirects();
-
-        $crawler = $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('[data-tf="menu.now"]');
         $this->assertCount(14, $crawler->filter('[data-tf="menu.item"]'));

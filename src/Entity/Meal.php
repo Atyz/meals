@@ -80,20 +80,21 @@ class Meal
     private Collection $themes;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private ?\DateTimeInterface $lastUseAt;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $token;
+
+    /**
+     * @ORM\OneToMany(targetEntity=MenuDay::class, mappedBy="meal")
+     */
+    private Collection $menuDays;
 
     public function __construct()
     {
         $this->id = Uuid::v6();
         $this->ingredients = new ArrayCollection();
         $this->themes = new ArrayCollection();
+        $this->menuDays = new ArrayCollection();
     }
 
     public static function getPreparations(): array
@@ -207,9 +208,6 @@ class Meal
         return $this;
     }
 
-    /**
-     * @return Collection|Theme[]
-     */
     public function getThemes(): Collection
     {
         return $this->themes;
@@ -233,18 +231,6 @@ class Meal
         return $this;
     }
 
-    public function getLastUseAt(): ?\DateTimeInterface
-    {
-        return $this->lastUseAt;
-    }
-
-    public function setLastUseAt(?\DateTimeInterface $lastUseAt): self
-    {
-        $this->lastUseAt = $lastUseAt;
-
-        return $this;
-    }
-
     public function getToken(): ?string
     {
         return $this->token;
@@ -253,6 +239,27 @@ class Meal
     public function setToken(string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getMenuDays(): Collection
+    {
+        return $this->menuDays;
+    }
+
+    public function addMenuDay(MenuDay $menuDay): self
+    {
+        if (!$this->menuDays->contains($menuDay)) {
+            $this->menuDays[] = $menuDay;
+        }
+
+        return $this;
+    }
+
+    public function removeMenuDay(MenuDay $menuDay): self
+    {
+        $this->menuDays->removeElement($menuDay);
 
         return $this;
     }

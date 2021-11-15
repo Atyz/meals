@@ -52,6 +52,7 @@ class MenuService
 
             $menuDay = (new MenuDay())
                 ->setMeal($meal)
+                ->setDate($date)
                 ->setDay($weekDay->getDay())
                 ->setTime($weekDay->getTime())
             ;
@@ -73,11 +74,8 @@ class MenuService
         return $meal;
     }
 
-    public function findCurrent(User $user)
+    public function findOn(User $user, \DateTime $date): ?Menu
     {
-        return $this->menuRepo->findForUserOn(
-            $user,
-            new \DateTime('monday this week')
-        );
+        return $this->menuRepo->findForUserOn($user, $date);
     }
 }

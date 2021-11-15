@@ -25,8 +25,15 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
             ->setDate((new \DateTime('monday this week')))
         ;
 
-        foreach ($this->getDayDatas() as $data) {
+        foreach ($this->getDayDatas($manager) as $data) {
+            $date = (new \DateTime())->setISODate(
+                $menu->getDate()->format('Y'),
+                $menu->getDate()->format('W'),
+                $data['day']
+            );
+
             $day = (new MenuDay())
+                ->setDate($date)
                 ->setMeal($data['meal'])
                 ->setDay($data['day'])
                 ->setTime($data['time'])
@@ -50,7 +57,7 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    private function getDayDatas(): array
+    private function getDayDatas(ObjectManager $manager): array
     {
         $pastaChicken = $this->getReference(MealFixtures::MEAL_PASTA_CHICKEN_REF);
         $riceChicken = $this->getReference(MealFixtures::MEAL_RICE_CHICKEN_REF);

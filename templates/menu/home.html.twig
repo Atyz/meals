@@ -19,33 +19,48 @@
         Bienvenue {{ app.user.email }}
     </div>
 
+    <h2 data-tf="menu.now">
+        Semaine {{ navigator.from|date('W') }}
+        du {{ navigator.from|date('d/m/Y') }}
+        au {{ navigator.to|date('d/m/Y') }}
+    </h2>
+
+    <div>
+        {% if navigator.canPrev %}
+            <a href="{{ url('home_date', { date: navigator.prev|date('Y-m-d') }) }}" data-tf="menu.prev.week">Semaine précédente</a>
+        {% endif %}
+
+        {% if navigator.canNext %}
+            <a href="{{ url('home_date', { date: navigator.next|date('Y-m-d') }) }}" class="ms-2" data-tf="menu.next.week">Semaine suivante</a>
+        {% endif %}
+    </div>
+
     {% if null == menu %}
         <div data-tf="menu.none">
             Aucune semaine n'est encore générée !
         </div>
     {% else %}
-        <h2 data-tf="menu.now">
-            Qu'est ce qu'on mange cette semaine ?
-        </h2>
-
         {% for day in menu.days %}
             <div data-tf="menu.item">
-                <h3>
+                <h4>
                     {{ day.dayLabel }} : {{ day.timeLabel }}
-                </h3>
+                </h4>
                 <div>
                     {{ null != day.meal ? day.meal.name : 'Aucun repas sélectionné !' }}
                 </div>
             </div>
         {% endfor %}
 
-        <a href="{{ url('shopping', { menu: menu.id }) }}">Voir la liste de course correspondante</a>
+        <a href="{{ url('shopping', { menu: menu.id }) }}" data-tf="shopping.link">
+            Voir la liste de course de cette semaine
+        </a>
     {% endif %}
 
-    <div>
-        <a href="{{ url('menu_generate') }}" data-tf="menu.link">
-            Générer une semaine
-        </a>
-    </div>
-
+    {% if false == navigator.isPast() %}
+        <div>
+            <a href="{{ url('menu_generate', { date: navigator.from|date('Y-m-d') }) }}" data-tf="menu.link">
+                Générer le menu de la semaine
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}

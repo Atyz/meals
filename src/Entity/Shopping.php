@@ -27,7 +27,7 @@ class Shopping
     private $menu;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Ingredient::class)
+     * @ORM\ManyToOne(targetEntity=Ingredient::class, inversedBy="shoppings")
      * @ORM\JoinColumn(nullable=false)
      */
     private $ingredient;

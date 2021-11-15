@@ -18,13 +18,18 @@ class MenuDay extends Day
     private Uuid $id;
 
     /**
+     * @ORM\Column(type="date")
+     */
+    private $date;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Menu::class, inversedBy="days")
      * @ORM\JoinColumn(nullable=false)
      */
     private $menu;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Meal::class)
+     * @ORM\ManyToOne(targetEntity=Meal::class, inversedBy="menuDays")
      */
     private $meal;
 
@@ -36,6 +41,18 @@ class MenuDay extends Day
     public function getId(): ?Uuid
     {
         return $this->id;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
     }
 
     public function getMenu(): ?Menu

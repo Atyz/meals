@@ -7,7 +7,13 @@
         Ma liste de courses
     </h1>
 
-    <a href="{{ url('home') }}" class="btn btn-secondary">
+    <h3 data-tf="shopping.now">
+        Semaine {{ navigator.from|date('W') }}
+        du {{ navigator.from|date('d/m/Y') }}
+        au {{ navigator.to|date('d/m/Y') }}
+    </h3>
+
+    <a href="{{ url('home_date', { date: navigator.from|date('Y-m-d') }) }}" class="btn btn-secondary">
         Retour
     </a>
 

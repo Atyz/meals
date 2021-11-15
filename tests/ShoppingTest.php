@@ -38,7 +38,7 @@ class ShoppingTest extends WebTestCase
         $this->login();
 
         $this->client->request('GET', '/');
-        $this->client->clickLink('Voir la liste de course correspondante');
+        $this->client->clickLink('Voir la liste de course de cette semaine');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('[data-tf="shopping.list"]');
 
@@ -52,8 +52,18 @@ class ShoppingTest extends WebTestCase
         $this->login();
 
         $this->client->request('GET', '/');
-        $crawler = $this->client->clickLink('Voir la liste de course correspondante');
+        $crawler = $this->client->clickLink('Voir la liste de course de cette semaine');
         $this->assertCount(4, $crawler->filter('[data-tf="shopping.item"]'));
+
+        $lundi = new \DateTime('monday this week');
+        $dimanche = new \DateTime('sunday this week');
+
+        $this->assertSelectorTextContains('[data-tf="shopping.now"]', sprintf(
+            'Semaine %s du %s au %s',
+            $lundi->format('W'),
+            $lundi->format('d/m/Y'),
+            $dimanche->format('d/m/Y')
+        ));
 
         $this->client->clickLink('Take');
         $this->assertResponseRedirects();
@@ -75,14 +85,14 @@ class ShoppingTest extends WebTestCase
         $this->login();
 
         $this->client->request('GET', '/');
-        $crawler = $this->client->clickLink('Voir la liste de course correspondante');
+        $crawler = $this->client->clickLink('Voir la liste de course de cette semaine');
         $this->client->clickLink('Take');
         $crawler = $this->client->followRedirect();
         $this->assertCount(1, $crawler->filter('[data-tf="shopping.untake"]'));
 
         $this->regenerateCurrentMenu();
 
-        $crawler = $this->client->clickLink('Voir la liste de course correspondante');
+        $crawler = $this->client->clickLink('Voir la liste de course de cette semaine');
         $this->assertCount(0, $crawler->filter('[data-tf="shopping.untake"]'));
     }
 }

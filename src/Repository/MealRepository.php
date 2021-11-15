@@ -50,7 +50,8 @@ class MealRepository extends ServiceEntityRepository
         $builder = $this
             ->findForUserQuery($weekDay->getWeek()->getUser())
             ->addSelect('RAND() as HIDDEN rand')
-            ->andWhere("DATE_ADD(m.lastUseAt, m.recurrence, 'week') <= :date OR m.lastUseAt IS NULL")
+            ->leftJoin('m.menuDays', 'md', 'WITH', 'md.date < :date')
+            ->andWhere("DATE_ADD(md.date, m.recurrence, 'week') <= :date OR md.date IS NULL")
                 ->setParameter(':date', $date)
             ->orderBy('rand')
             ->setMaxResults(1)

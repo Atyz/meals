@@ -9,7 +9,7 @@ trait MenuTestTrait
     public function regenerateCurrentMenu()
     {
         $this->client->request('GET', '/');
-        $crawler = $this->client->clickLink('Générer une semaine');
+        $crawler = $this->client->clickLink('Générer le menu de la semaine');
         $form = $crawler->filter('[data-tf="menu.form"]')->form();
 
         $form['menu[week]'] = WeekFixtures::WEEK_CLASSIC_UUID;

@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\DataFixtures\WeekFixtures;
 use App\Entity\Meal;
 use App\Entity\User;
+use App\Service\MenuNavigator;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -50,12 +51,46 @@ class MenuTest extends WebTestCase
         $this->assertSelectorExists('[data-tf="menu.none"]');
         $this->assertSelectorExists('[data-tf="menu.link"]');
 
-        $this->client->clickLink('Générer une semaine');
+        $this->client->clickLink('Générer le menu de la semaine');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('[data-tf="menu.generate"]');
 
         $this->client->clickLink('Retour');
         $this->assertResponseIsSuccessful();
+
+        $this->client->clickLink('Semaine précédente');
+        $this->assertResponseIsSuccessful();
+        $this->client->clickLink('Semaine suivante');
+        $this->assertResponseIsSuccessful();
+
+        $lundi = new \DateTime('monday this week');
+        $dimanche = new \DateTime('sunday this week');
+
+        $this->assertSelectorTextContains('[data-tf="menu.now"]', sprintf(
+            'Semaine %s du %s au %s',
+            $lundi->format('W'),
+            $lundi->format('d/m/Y'),
+            $dimanche->format('d/m/Y')
+        ));
+
+        $this->client->request('GET', '/semaine-2000-01-01');
+        $this->assertResponseRedirects();
+        $this->client->followRedirect();
+        $this->assertSelectorExists('[data-tf="menu.now"]');
+
+        $maxPrevWeek = (new \DateTime(MenuNavigator::FIRST_DAY_OF_WEEK.' this week'))
+            ->modify('- '.MenuNavigator::MAX_WEEK_PREV.' weeks');
+
+        $crawler = $this->client->request('GET', '/semaine-'.$maxPrevWeek->format('Y-m-d'));
+        $this->assertCount(0, $crawler->filter('[data-tf="menu.prev.week"]'));
+        $this->assertCount(0, $crawler->filter('[data-tf="menu.link"]'));
+
+        $maxNextWeek = (new \DateTime(MenuNavigator::FIRST_DAY_OF_WEEK.' this week'))
+            ->modify('+ '.MenuNavigator::MAX_WEEK_NEXT.' weeks');
+
+        $crawler = $this->client->request('GET', '/semaine-'.$maxNextWeek->format('Y-m-d'));
+        $this->assertCount(0, $crawler->filter('[data-tf="menu.next.week"]'));
+        $this->assertCount(1, $crawler->filter('[data-tf="menu.link"]'));
     }
 
     public function testValidation(): void
@@ -63,7 +98,7 @@ class MenuTest extends WebTestCase
         $this->login();
 
         $this->client->request('GET', '/');
-        $crawler = $this->client->clickLink('Générer une semaine');
+        $crawler = $this->client->clickLink('Générer le menu de la semaine');
         $form = $crawler->filter('[data-tf="menu.form"]')->form();
 
         $form->disableValidation();

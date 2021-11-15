@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Menu;
 use App\Entity\Shopping;
+use App\Service\MenuNavigator;
 use App\Service\ShoppingService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,13 +15,18 @@ class ShoppingController extends AbstractController
     /**
      * @Route("/ma-liste-de-course/{menu}", name="shopping")
      */
-    public function home(Menu $menu, ShoppingService $service): Response
-    {
+    public function home(
+        Menu $menu,
+        ShoppingService $service,
+        MenuNavigator $navigator
+    ): Response {
         $service->build($menu);
         $shoppings = $service->findForMenu($menu);
+        $navigator->setBaseDate($menu->getDate());
 
         return $this->render('shopping/home.html.twig', [
             'shoppings' => $shoppings,
+            'navigator' => $navigator,
         ]);
     }
 

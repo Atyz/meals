@@ -89,7 +89,6 @@ class MenuNavigator
     public function isFuture(): bool
     {
         $now = (new \DateTime(self::FIRST_DAY_OF_WEEK.' this week'));
-        dump($now, $this->from);
 
         return $this->from->format('Y-m-d') > $now->format('Y-m-d');
     }

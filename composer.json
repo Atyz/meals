@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "*",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/migrations": "3.3.x-dev",
         "doctrine/orm": "3.0.x-dev as 2.11.x-dev",
@@ -53,7 +54,6 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "liip/test-fixtures-bundle": "^2.0.0",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.0.*",

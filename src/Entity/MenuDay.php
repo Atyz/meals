@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\MenyDayRepository;
+use App\Repository\MenuDayRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @ORM\Entity(repositoryClass=MenyDayRepository::class)
+ * @ORM\Entity(repositoryClass=MenuDayRepository::class)
  */
 class MenuDay extends Day
 {

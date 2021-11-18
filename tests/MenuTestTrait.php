@@ -6,13 +6,12 @@ use App\DataFixtures\WeekFixtures;
 
 trait MenuTestTrait
 {
-    public function regenerateCurrentMenu()
+    public function generateMenu($weekUuid = WeekFixtures::WEEK_CLASSIC_UUID)
     {
-        $this->client->request('GET', '/');
         $crawler = $this->client->clickLink('Générer le menu de la semaine');
         $form = $crawler->filter('[data-tf="menu.form"]')->form();
 
-        $form['menu[week]'] = WeekFixtures::WEEK_CLASSIC_UUID;
+        $form['menu[week]'] = $weekUuid;
         $form['menu[date]'] = 0;
         $this->client->submit($form);
         $this->assertResponseRedirects();

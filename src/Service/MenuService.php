@@ -2,12 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Meal;
 use App\Entity\Menu;
-use App\Entity\MenuDay;
 use App\Entity\User;
-use App\Entity\WeekDay;
-use App\Repository\MealRepository;
 use App\Repository\MenuRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,17 +11,18 @@ class MenuService
 {
     private ManagerRegistry $doctrine;
     private MenuManager $manager;
+    private MenuDayService $menuDayService;
     private MenuRepository $menuRepo;
-    private MealRepository $mealRepo;
 
     public function __construct(
         ManagerRegistry $doctrine,
-        MenuManager $manager
+        MenuManager $manager,
+        MenuDayService $menuDayService
     ) {
         $this->doctrine = $doctrine;
         $this->manager = $manager;
+        $this->menuDayService = $menuDayService;
         $this->menuRepo = $this->doctrine->getRepository(Menu::class);
-        $this->mealRepo = $this->doctrine->getRepository(Meal::class);
     }
 
     public function generate(Menu $menu): Menu
@@ -46,32 +43,13 @@ class MenuService
                 $weekDay->getDay()
             );
 
-            $meal = $this->findMeal($weekDay, $date, $excluded);
-            $excluded[] = $meal;
-            $excluded = array_filter($excluded);
-
-            $menuDay = (new MenuDay())
-                ->setMeal($meal)
-                ->setDate($date)
-                ->setDay($weekDay->getDay())
-                ->setTime($weekDay->getTime())
-            ;
+            $menuDay = $this->menuDayService->create($weekDay, $date, $excluded);
+            $excluded[] = $menuDay->getMeal();
 
             $menu->addDay($menuDay);
         }
 
         return $this->manager->save($menu);
-    }
-
-    public function findMeal(WeekDay $weekDay, \DateTime $date, array $excluded): ?Meal
-    {
-        $meal = $this->mealRepo->findOneForWeekDayAndDate($weekDay, $date, $excluded);
-
-        if (null === $meal) {
-            $meal = $this->mealRepo->findOneForWeekDayAndDate($weekDay, $date);
-        }
-
-        return $meal;
     }
 
     public function findOn(User $user, \DateTime $date): ?Menu

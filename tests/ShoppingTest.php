@@ -90,7 +90,8 @@ class ShoppingTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertCount(1, $crawler->filter('[data-tf="shopping.untake"]'));
 
-        $this->regenerateCurrentMenu();
+        $this->client->request('GET', '/');
+        $this->generateMenu();
 
         $crawler = $this->client->clickLink('Voir la liste de course de cette semaine');
         $this->assertCount(0, $crawler->filter('[data-tf="shopping.untake"]'));

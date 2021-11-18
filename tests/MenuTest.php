@@ -130,10 +130,35 @@ class MenuTest extends WebTestCase
     {
         $this->login();
 
-        $crawler = $this->regenerateCurrentMenu();
+        $this->client->request('GET', '/');
+        $crawler = $this->generateMenu();
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('[data-tf="menu.now"]');
         $this->assertCount(14, $crawler->filter('[data-tf="menu.item"]'));
+    }
+
+    public function testChangeMeal(): void
+    {
+        $this->login();
+
+        $crawler = $this->client->request('GET', '/');
+        $prevName = $crawler->filter('[data-tf="menu.item.name"]')->text();
+        $this->client->clickLink('♺');
+        $this->assertResponseRedirects();
+
+        $crawler = $this->client->followRedirect();
+        $name = $crawler->filter('[data-tf="menu.item.name"]')->text();
+        $this->assertResponseIsSuccessful();
+        $this->assertNotEquals($prevName, $name);
+
+        $this->client->clickLink('Semaine suivante');
+        $prevWeek = $crawler->filter('[data-tf="menu.week"]')->text();
+        $this->generateMenu(WeekFixtures::WEEK_EMPTY_UUID);
+        $this->assertSelectorTextContains('[data-tf="menu.item.name"]', 'Aucun repas sélectionné !');
+        $this->client->clickLink('♺');
+        $crawler = $this->client->followRedirect();
+        $this->assertSelectorTextContains('[data-tf="menu.item.name"]', 'Aucun repas sélectionné !');
+        $this->assertSelectorTextContains('[data-tf="menu.week"]', $prevWeek);
     }
 }

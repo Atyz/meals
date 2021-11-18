@@ -15,16 +15,49 @@ class WeekFixtures extends Fixture implements DependentFixtureInterface
     public const WEEK_CLASSIC_UUID = '1ec3801e-4e28-6860-abc7-41eec189e50d';
     public const WEEK_CLASSIC_REF = 'week.classic';
 
+    public const WEEK_EMPTY_UUID = '1ec48465-d225-6cf2-ba77-a30a0a1c6852';
+    public const WEEK_EMPTY_REF = 'week.empty';
+
     public function load(ObjectManager $manager): void
+    {
+        $classic = $this->createWeek(
+            self::WEEK_CLASSIC_UUID,
+            'Semaine normale',
+            $this->getDayDatas()
+        );
+
+        $empty = $this->createWeek(
+            self::WEEK_EMPTY_UUID,
+            'Semaine vide',
+            $this->getDayDatasForEmpty()
+        );
+
+        $manager->persist($classic);
+        $manager->persist($empty);
+        $manager->flush();
+
+        $this->addReference(self::WEEK_CLASSIC_REF, $classic);
+        $this->addReference(self::WEEK_EMPTY_REF, $empty);
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class,
+            ThemeFixtures::class,
+        ];
+    }
+
+    private function createWeek(string $uuid, string $name, array $datas)
     {
         $atyz = $this->getReference(UserFixtures::ATYZ_USER_REF);
 
-        $week = (new Week('1ec3801e-4e28-6860-abc7-41eec189e50d'))
+        $week = (new Week($uuid))
             ->setUser($atyz)
-            ->setName('Semaine normale')
+            ->setName($name)
         ;
 
-        foreach ($this->getDayDatas() as $data) {
+        foreach ($datas as $data) {
             $day = (new WeekDay())
                 ->setUsed(true)
                 ->setPreparations($data['prep'])
@@ -39,17 +72,20 @@ class WeekFixtures extends Fixture implements DependentFixtureInterface
             $week->addDay($day);
         }
 
-        $manager->persist($week);
-        $manager->flush();
-
-        $this->addReference(self::WEEK_CLASSIC_REF, $week);
+        return $week;
     }
 
-    public function getDependencies(): array
+    private function getDayDatasForEmpty()
     {
+        $diet = $this->getReference(ThemeFixtures::THEME_DIET_REF);
+
         return [
-            UserFixtures::class,
-            ThemeFixtures::class,
+            [
+                'day' => Day::MONDAY,
+                'time' => Day::TIME_LUNCH,
+                'prep' => [Meal::PREP_LONG],
+                'themes' => [$diet],
+            ],
         ];
     }
 

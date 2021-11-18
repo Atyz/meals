@@ -57,6 +57,8 @@ class MealRepository extends ServiceEntityRepository
             ->setMaxResults(1)
         ;
 
+        $excluded = array_filter($excluded);
+
         if (0 < count($excluded)) {
             $ids = array_map(function (Meal $meal) {
                 return $meal->getId()->toBinary();

@@ -1,0 +1,2 @@
+# meals
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fc56365ef4e54ae58ecc12a854a97d5c)](https://app.codacy.com/gh/Atyz/meals?utm_source=github.com&utm_medium=referral&utm_content=Atyz/meals&utm_campaign=Badge_Grade_Settings)

@@ -57,7 +57,7 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    private function getDayDatas(ObjectManager $manager): array
+    private function getDayDatas(): array
     {
         $pastaChicken = $this->getReference(MealFixtures::MEAL_PASTA_CHICKEN_REF);
         $riceChicken = $this->getReference(MealFixtures::MEAL_RICE_CHICKEN_REF);

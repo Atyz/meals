@@ -15,6 +15,15 @@ class MenuDayService
         $this->mealRepo = $this->doctrine->getRepository(Meal::class);
     }
 
+    public function save(MenuDay $menuDay): MenuDay
+    {
+        $entityMgr = $this->doctrine->getManager();
+        $entityMgr->persist($menuDay);
+        $entityMgr->flush();
+
+        return $menuDay;
+    }
+
     public function create(WeekDay $weekDay, $date, $excluded): MenuDay
     {
         $meal = $this->findMeal($weekDay, $date, $excluded);
@@ -27,7 +36,7 @@ class MenuDayService
         ;
     }
 
-    public function changeMeal(MenuDay $menuDay): ?MenuDay
+    public function changeMeal(MenuDay $menuDay): MenuDay
     {
         $menu = $menuDay->getMenu();
         $forceExcluded = [$menuDay->getMeal()];
@@ -44,11 +53,14 @@ class MenuDayService
             $forceExcluded
         ));
 
-        $entityMgr = $this->doctrine->getManager();
-        $entityMgr->persist($menuDay);
-        $entityMgr->flush();
+        return $this->save($menuDay);
+    }
 
-        return $menuDay;
+    public function removeMeal(MenuDay $menuDay): MenuDay
+    {
+        $menuDay->setMeal(null);
+
+        return $this->save($menuDay);
     }
 
     public function findWeekDay(MenuDay $menuDay): ?WeekDay

@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Menu;
-use App\Entity\MenuDay;
 use App\Form\Menu\MenuType;
-use App\Service\MenuDayService;
 use App\Service\MenuNavigator;
 use App\Service\MenuService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,18 +60,6 @@ class MenuController extends AbstractController
 
         return $this->render('menu/generation.html.twig', [
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/menu/changer-un-plat/{day}", name="menu_change")
-     */
-    public function change(MenuDay $day, MenuDayService $service): Response
-    {
-        $service->changeMeal($day);
-
-        return $this->redirectToRoute('home_date', [
-            'date' => $day->getMenu()->getDate()->format('Y-m-d'),
         ]);
     }
 }

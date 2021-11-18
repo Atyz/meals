@@ -47,8 +47,16 @@
                         {{ day.dayLabel }} : {{ day.timeLabel }}
                     </h4>
                     <div>
-                        <span data-tf="menu.item.name">{{ null != day.meal ? day.meal.name : 'Aucun repas sélectionné !' }}</span>
-                        <a href="{{ url('menu_change', { day: day.id }) }}" title="Changer de plat automatiquement">♺</a>
+                        <span data-tf="menu.item.name">{{ day.meal ? day.meal.name : 'Aucun repas sélectionné !' }}</span>
+                        <a href="{{ url('menu_day_change', { day: day.id }) }}" title="Changer de plat automatiquement">♺</a>
+
+                        {% if day.meal %}
+                            <a href="{{ url('menu_day_remove', { day: day.id }) }}"
+                                title="Je ne prévois rien pour ce repas"
+                                data-tf="menu.item.remove">
+                                ✘
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

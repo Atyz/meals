@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ingrédients{% endblock %}
+
+{% block body %}
+    <h1 data-tf="adm.ingredient.edit">
+        Modifier l'ingrédient
+    </h1>
+
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate',
+        'data-tf': 'adm.ingredient.form'
+    }}) }}
+        {% include 'admin/ingredient/form.html.twig' %}
+
+        <button type="submit" class="btn btn-primary">
+            Modifier cet ingrédient
+        </button>
+
+        <a href="{{ url('admin_ingredient') }}" class="btn btn-secondary">
+            Retour
+        </a>
+    {{ form_end(form) }}
+{% endblock %}

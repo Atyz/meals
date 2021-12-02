@@ -8,11 +8,17 @@
         MEALS
     </h1>
 
-    <div>
+    <div class="alert alert-secondary">
+        <h5>Menu</h5>
         <a href="{{ url('meal') }}">Mes plats</a> |
         <a href="{{ url('week') }}">Mes semaines types</a> |
         <a href="{{ url('theme') }}">Mes thèmes</a> |
         <a href="{{ path('logout') }}">Logout</a>
+    </div>
+
+    <div class="alert alert-secondary">
+        <h5>Admin</h5>
+        <a href="{{ url('admin_ingredient') }}">Gestion des ingrédients</a> |
     </div>
 
     <div>

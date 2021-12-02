@@ -43,7 +43,10 @@ class IngredientFixtures extends Fixture
 
         foreach ($ingredients as $name => $data) {
             $uuid = null !== $data ? $data['uuid'] : null;
-            $ingredient = (new Ingredient($uuid))->setName($name);
+            $ingredient = (new Ingredient($uuid))
+                ->setName($name)
+                ->setSeasonality([])
+            ;
             $manager->persist($ingredient);
 
             if (null !== $data) {

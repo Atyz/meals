@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Ingredient;
 use App\Entity\Menu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class IngredientRepository extends ServiceEntityRepository
 {
+    const ADMIN_PAGINATOR_PER_PAGE = 2;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Ingredient::class);
@@ -31,5 +34,18 @@ class IngredientRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function getPaginator(int $offset): Paginator
+    {
+        $query = $this
+            ->createQueryBuilder('i')
+            ->addOrderBy('i.name', 'asc')
+            ->setMaxResults(self::ADMIN_PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+            ->getQuery()
+        ;
+
+        return new Paginator($query);
     }
 }

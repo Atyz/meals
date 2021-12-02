@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des ingrédients{% endblock %}
+
+{% block body %}
+    <h1 data-tf="adm.ingredient.list">
+        Gestion des ingrédients
+    </h1>
+
+
+    <a href="{{ url('admin_ingredient_new') }}" class="btn btn-secondary">
+        Nouveau
+    </a>
+    <a href="{{ url('home') }}" class="btn btn-secondary">
+        Retour
+    </a>
+
+    <p>
+        <strong>
+            <span data-tf="adm.ingredient.total">{{ ingredients|length }}</span>
+            ingrédients au total
+        </strong>
+    </p>
+
+    <ul>
+        {% for ingredient in ingredients %}
+            <li data-tf="adm.ingredient.item">
+                <span data-tf="adm.ingredient.item.name">{{ ingredient.name }}</span>
+                <a href="{{ url('admin_ingredient_edit', { id: ingredient.id }) }}" class="btn btn-warning">Modifier</a>
+                <a href="{{ url('admin_ingredient_del', { id: ingredient.id }) }}" class="btn btn-danger">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if prev >= 0 %}
+        <a href="{{ url('admin_ingredient', { 'offset': prev }) }}" data-tf="adm.ingredient.prev">
+            Précédent
+        </a>
+    {% endif %}
+
+    {% if next < ingredients|length %}
+        <a href="{{ url('admin_ingredient', { 'offset': next }) }}" data-tf="adm.ingredient.next">
+            Suivant
+        </a>
+    {% endif %}
+{% endblock %}

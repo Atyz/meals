@@ -47,6 +47,11 @@ class Ingredient
      */
     private Collection $shoppings;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="ingredients")
+     */
+    private $category;
+
     public function __construct(?string $uuid = null)
     {
         $this->id = null !== $uuid ? Uuid::fromString($uuid) : Uuid::v6();
@@ -120,5 +125,17 @@ class Ingredient
     public function getShoppings(): Collection
     {
         return $this->shoppings;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }

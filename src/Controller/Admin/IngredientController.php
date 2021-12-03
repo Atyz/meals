@@ -16,7 +16,7 @@ class IngredientController extends AbstractController
     /**
      * @Route("/admin/ingredient/liste/{offset}", name="admin_ingredient")
      */
-    public function home(Request $request, IngredientRepository $repo, int $offset = null): Response
+    public function home(IngredientRepository $repo, int $offset = null): Response
     {
         $offset = max(0, $offset);
         $paginator = $repo->getPaginator($offset);
@@ -35,7 +35,6 @@ class IngredientController extends AbstractController
     public function new(Request $request, IngredientManager $manager): Response
     {
         $form = $this->createForm(IngredientType::class, new Ingredient());
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -2,7 +2,10 @@
 
 namespace App\Form\Ingredient;
 
+use App\Entity\Category;
 use App\Entity\Ingredient;
+use App\Repository\CategoryRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,6 +22,14 @@ class IngredientType extends AbstractType
                 'choices' => Ingredient::getSeasonalities(),
                 'expanded' => true,
                 'multiple' => true,
+            ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Aucune catégorie',
+                'query_builder' => function (CategoryRepository $repo) {
+                    return $repo->findOrderedQuery();
+                },
             ])
         ;
     }

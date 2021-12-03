@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des catgégories{% endblock %}
+
+{% block body %}
+    <h1 data-tf="adm.category.list">
+        Gestion des catgégories
+    </h1>
+
+
+    <a href="{{ url('admin_category_new') }}" class="btn btn-secondary">
+        Nouvelle
+    </a>
+    <a href="{{ url('home') }}" class="btn btn-secondary">
+        Retour
+    </a>
+
+    <p>
+        <strong>
+            <span data-tf="adm.category.total">{{ categories|length }}</span>
+            catgégories au total
+        </strong>
+    </p>
+
+    <ul>
+        {% for category in categories %}
+            <li data-tf="adm.category.item">
+                <span data-tf="adm.category.item.name">{{ category.name }}</span>
+                <a href="{{ url('admin_category_edit', { id: category.id }) }}" class="btn btn-warning">Modifier</a>
+                <a href="{{ url('admin_category_del', { id: category.id }) }}" class="btn btn-danger">Supprimer</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if prev >= 0 %}
+        <a href="{{ url('admin_category', { 'offset': prev }) }}" data-tf="adm.category.prev">
+            Précédent
+        </a>
+    {% endif %}
+
+    {% if next < categories|length %}
+        <a href="{{ url('admin_category', { 'offset': next }) }}" data-tf="adm.category.next">
+            Suivant
+        </a>
+    {% endif %}
+{% endblock %}

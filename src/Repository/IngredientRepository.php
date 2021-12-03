@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class IngredientRepository extends ServiceEntityRepository
 {
-    const ADMIN_PAGINATOR_PER_PAGE = 2;
+    public const ADMIN_PAGINATOR_PER_PAGE = 2;
 
     public function __construct(ManagerRegistry $registry)
     {

@@ -2,49 +2,26 @@
 
 namespace App\Tests;
 
+use App\DataFixtures\CategoryFixtures;
 use App\Entity\Ingredient;
-use App\Entity\Meal;
-use App\Entity\User;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
-use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class IngredientTest extends WebTestCase
+class IngredientTest extends BaseTest
 {
-    private KernelBrowser $client;
-    protected AbstractDatabaseTool $databaseTool;
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-
-        $entityManager = $this->client->getContainer()->get('doctrine')->getManager();
-
-        $this->databaseTool = $this->client->getContainer()->get(DatabaseToolCollection::class)->get();
-        $this->mealRepo = $entityManager->getRepository(Meal::class);
-        $this->userRepo = $entityManager->getRepository(User::class);
-    }
-
-    private function login(): void
-    {
-        $atyz = $this->userRepo->findOneByEmail('atyz@meals.fr');
-        $this->client->loginUser($atyz);
-    }
-
     public function testAccess(): void
     {
         $this->databaseTool->loadFixtures([
             'App\DataFixtures\UserFixtures',
-            'App\DataFixtures\IngredientFixtures',
         ]);
 
         $this->login();
 
         $this->client->request('GET', '/');
         $this->client->clickLink('Gestion des ingrédients');
+
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('[data-tf="adm.ingredient.list"]');
+        $this->assertSelectorNotExists('[data-tf="adm.ingredient.next"]');
+        $this->assertSelectorNotExists('[data-tf="adm.ingredient.prev"]');
 
         $this->client->clickLink('Retour');
         $this->assertResponseIsSuccessful();
@@ -53,6 +30,12 @@ class IngredientTest extends WebTestCase
 
     public function testNavigation(): void
     {
+        $this->databaseTool->loadFixtures([
+            'App\DataFixtures\UserFixtures',
+            'App\DataFixtures\CategoryFixtures',
+            'App\DataFixtures\IngredientFixtures',
+        ]);
+
         $this->login();
 
         $this->client->request('GET', '/admin/ingredient/liste');
@@ -64,7 +47,7 @@ class IngredientTest extends WebTestCase
         $this->assertSelectorExists('[data-tf="adm.ingredient.next"]');
         $this->assertSelectorExists('[data-tf="adm.ingredient.prev"]');
 
-        $this->client->request('GET', '/admin/ingredient/liste/6');
+        $this->client->request('GET', '/admin/ingredient/liste/4');
         $this->assertSelectorNotExists('[data-tf="adm.ingredient.next"]');
         $this->assertSelectorExists('[data-tf="adm.ingredient.prev"]');
 
@@ -91,18 +74,27 @@ class IngredientTest extends WebTestCase
         $crawler = $this->client->clickLink('Nouveau');
         $form = $crawler->filter('[data-tf="adm.ingredient.form"]')->form();
 
+        $form->disableValidation();
+        $invalidUuid = '10';
+        $form['ingredient[category]'] = $invalidUuid;
+
         $this->client->submit($form);
         $this->assertSelectorTextContains('#ingredient_name_error .invalid-feedback', 'Merci de donner un nom à votre ingrédient.');
+        $this->assertSelectorTextContains('#ingredient_category_error .invalid-feedback', 'Le choix sélectionné est invalide.');
 
         $form->disableValidation();
+        $notExistantUuid = '4d6f5942-3612-426c-bf58-45ea3f87fe70';
         $form['ingredient[name]'] = str_repeat('A', 256);
+        $form['ingredient[category]'] = $notExistantUuid;
         $form['ingredient[seasonality]'] = [26];
 
         $this->client->submit($form);
         $this->assertSelectorTextContains('#ingredient_name_error .invalid-feedback', 'Le nom de votre ingrédient ne peut pas faire plus de 255 caractères.');
+        $this->assertSelectorTextContains('#ingredient_category_error .invalid-feedback', 'Le choix sélectionné est invalide.');
         $this->assertSelectorTextContains('#ingredient_seasonality_error .invalid-feedback', 'Le choix sélectionné est invalide.');
 
         $form['ingredient[name]'] = 'Asperge';
+        $form['ingredient[category]'] = CategoryFixtures::CATEGORY_MEAT_UUID;
         $form['ingredient[seasonality]'] = [
             Ingredient::SEASONALITY_SPRING,
             Ingredient::SEASONALITY_SUMMER,

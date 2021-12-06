@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Ingredient;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class IngredientFixtures extends Fixture
+class IngredientFixtures extends Fixture implements DependentFixtureInterface
 {
     public const INGREDIENT_CHICKEN_UUID = 'de4b5e4f-cd18-4f0f-90ef-f1b27fee1acd';
     public const INGREDIENT_STEAK_UUID = '1ec2a974-5140-6ede-ba30-bbd0b70daf85';
@@ -20,14 +21,19 @@ class IngredientFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $categoryMeat = $this->getReference(CategoryFixtures::CATEGORY_MEAT_REF);
+        $categoryCarb = $this->getReference(CategoryFixtures::CATEGORY_CARB_REF);
+
         $ingredients = [
             'Escalope de poulet' => [
                 'uuid' => self::INGREDIENT_CHICKEN_UUID,
                 'ref' => self::INGREDIENT_CHICKEN_REF,
+                'category' => $categoryMeat,
             ],
             'Pâtes' => [
                 'uuid' => self::INGREDIENT_PASTA_UUID,
                 'ref' => self::INGREDIENT_PASTA_REF,
+                'category' => $categoryCarb,
             ],
             'Riz' => [
                 'uuid' => self::INGREDIENT_RICE_UUID,
@@ -47,6 +53,11 @@ class IngredientFixtures extends Fixture
                 ->setName($name)
                 ->setSeasonality([])
             ;
+
+            if (null !== $data && array_key_exists('category', $data)) {
+                $ingredient->setCategory($data['category']);
+            }
+
             $manager->persist($ingredient);
 
             if (null !== $data) {
@@ -55,5 +66,12 @@ class IngredientFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            CategoryFixtures::class,
+        ];
     }
 }

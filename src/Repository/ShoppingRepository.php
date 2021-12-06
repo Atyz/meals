@@ -24,8 +24,12 @@ class ShoppingRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('s')
+            ->leftJoin('s.ingredient', 'i')
+            ->leftJoin('i.category', 'c')
             ->andWhere('s.menu = :menu')
                 ->setParameter('menu', $menu->getId(), 'uuid')
+            ->addOrderBy('c.name', 'asc')
+            ->addOrderBy('i.name', 'asc')
             ->getQuery()
             ->getResult()
         ;

@@ -69,6 +69,20 @@ class ShoppingService
 
     public function findForMenu(Menu $menu): array
     {
-        return $this->shoppingRepo->findForMenu($menu);
+        $list = [];
+
+        foreach ($this->shoppingRepo->findForMenu($menu) as $shopping) {
+            $key = null !== $shopping->getIngredient()->getCategory() ?
+                $shopping->getIngredient()->getCategory()->getId()->toRfc4122() :
+                -1;
+
+            if (!array_key_exists($key, $list)) {
+                $list[$key] = new ShoppingCategory($shopping->getIngredient()->getCategory());
+            }
+
+            $list[$key]->addShopping($shopping);
+        }
+
+        return $list;
     }
 }

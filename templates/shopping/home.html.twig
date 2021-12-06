@@ -17,16 +17,22 @@
         Retour
     </a>
 
-    <ul>
-        {% for shopping in shoppings %}
-            <li data-tf="shopping.item">
-                <span>{{ shopping.ingredient.name }}</span>
-                {% if shopping.isToTake %}
-                    <a href="{{ url('shopping_take', { shopping: shopping.id }) }}" data-tf="shopping.take">Take</a>
-                {% else %}
-                    <a href="{{ url('shopping_untake', { shopping: shopping.id }) }}" data-tf="shopping.untake">Untake</a>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+    {% for category in shpCategories %}
+        <h4 data-tf="shopping.category" data-idx="{{ loop.index }}">
+            {{ category.name }}
+        </h4>
+
+        <ul>
+            {% for shopping in category.shoppings %}
+                <li data-tf="shopping.item">
+                    <span>{{ shopping.ingredient.name }}</span>
+                    {% if shopping.isToTake %}
+                        <a href="{{ url('shopping_take', { shopping: shopping.id }) }}" data-tf="shopping.take">Take</a>
+                    {% else %}
+                        <a href="{{ url('shopping_untake', { shopping: shopping.id }) }}" data-tf="shopping.untake">Untake</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
 {% endblock %}

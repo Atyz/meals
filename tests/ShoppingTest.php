@@ -78,6 +78,11 @@ class ShoppingTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertCount(4, $crawler->filter('[data-tf="shopping.take"]'));
         $this->assertCount(0, $crawler->filter('[data-tf="shopping.untake"]'));
+
+        $this->assertCount(3, $crawler->filter('[data-tf="shopping.category"]'));
+        $this->assertSelectorTextContains('[data-tf="shopping.category"][data-idx="1"]', 'Sans rayon');
+        $this->assertSelectorTextContains('[data-tf="shopping.category"][data-idx="2"]', 'Féculents');
+        $this->assertSelectorTextContains('[data-tf="shopping.category"][data-idx="3"]', 'Viandes');
     }
 
     public function testResetAfterRegenerate()

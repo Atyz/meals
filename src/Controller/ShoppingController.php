@@ -21,11 +21,10 @@ class ShoppingController extends AbstractController
         MenuNavigator $navigator
     ): Response {
         $service->build($menu);
-        $shoppings = $service->findForMenu($menu);
         $navigator->setBaseDate($menu->getDate());
 
         return $this->render('shopping/home.html.twig', [
-            'shoppings' => $shoppings,
+            'shpCategories' => $service->findForMenu($menu),
             'navigator' => $navigator,
         ]);
     }

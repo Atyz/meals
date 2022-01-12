@@ -19,15 +19,6 @@ class ShoppingService
         $this->ingredientRepo = $this->doctrine->getRepository(Ingredient::class);
     }
 
-    public function save(Shopping $shopping): Shopping
-    {
-        $entityMgr = $this->doctrine->getManager();
-        $entityMgr->persist($shopping);
-        $entityMgr->flush();
-
-        return $shopping;
-    }
-
     public function build(Menu $menu): void
     {
         $ingredients = new ArrayCollection($this->ingredientRepo->findForMenuInShopping($menu));
@@ -55,29 +46,15 @@ class ShoppingService
         $entityMgr->flush();
     }
 
-    public function take(Shopping $shopping): void
-    {
-        $shopping->setStatus(Shopping::STATUS_TAKEN);
-        $this->save($shopping);
-    }
-
-    public function untake(Shopping $shopping): void
-    {
-        $shopping->setStatus(Shopping::STATUS_TO_TAKE);
-        $this->save($shopping);
-    }
-
     public function findForMenu(Menu $menu): array
     {
         $list = [];
 
         foreach ($this->shoppingRepo->findForMenu($menu) as $shopping) {
-            $key = null !== $shopping->getIngredient()->getCategory() ?
-                $shopping->getIngredient()->getCategory()->getId()->toRfc4122() :
-                -1;
+            $key = null !== $shopping->getCategory() ? $shopping->getCategory()->getId()->toRfc4122() : -1;
 
             if (!array_key_exists($key, $list)) {
-                $list[$key] = new ShoppingCategory($shopping->getIngredient()->getCategory());
+                $list[$key] = new ShoppingCategory($shopping->getCategory());
             }
 
             $list[$key]->addShopping($shopping);

@@ -25,14 +25,24 @@
         <ul>
             {% for shopping in category.shoppings %}
                 <li data-tf="shopping.item">
-                    <span>{{ shopping.ingredient.name }}</span>
+                    <span>{{ shopping.name }}</span>
+
                     {% if shopping.isToTake %}
                         <a href="{{ url('shopping_take', { shopping: shopping.id }) }}" data-tf="shopping.take">Take</a>
                     {% else %}
                         <a href="{{ url('shopping_untake', { shopping: shopping.id }) }}" data-tf="shopping.untake">Untake</a>
                     {% endif %}
+
+                    {% if shopping.isFree %}
+                        <a href="{{ url('shopping_edit', { shopping: shopping.id }) }}" data-tf="shopping.edit">✎</a>
+                        <a href="{{ url('shopping_del', { shopping: shopping.id }) }}" data-tf="shopping.del">✘</a>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
     {% endfor %}
+
+    <a href="{{ url('shopping_new', { menu: menu.id }) }}">
+        Ajouter un item
+    </a>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ShoppingRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ShoppingRepository::class)
@@ -28,7 +29,7 @@ class Shopping
 
     /**
      * @ORM\ManyToOne(targetEntity=Ingredient::class, inversedBy="shoppings")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $ingredient;
 
@@ -36,6 +37,19 @@ class Shopping
      * @ORM\Column(type="boolean")
      */
     private $status = self::STATUS_TO_TAKE;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(groups={"free"})
+     * @Assert\Length(max=255, groups={"free"})
+     */
+    private $freename;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class)
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $freecategory = null;
 
     public function __construct(?string $uuid = null)
     {
@@ -83,8 +97,55 @@ class Shopping
         return $this;
     }
 
+    public function getFreename(): ?string
+    {
+        return $this->freename;
+    }
+
+    public function setFreename(?string $freename): self
+    {
+        $this->freename = $freename;
+
+        return $this;
+    }
+
+    public function getFreecategory(): ?Category
+    {
+        return $this->freecategory;
+    }
+
+    public function setFreecategory(?Category $freecategory): self
+    {
+        $this->freecategory = $freecategory;
+
+        return $this;
+    }
+
     public function isToTake(): bool
     {
         return self::STATUS_TO_TAKE === $this->getStatus();
+    }
+
+    public function isFree(): bool
+    {
+        return null !== $this->freename;
+    }
+
+    public function getName(): string
+    {
+        if (null === $this->getIngredient()) {
+            return $this->getFreename();
+        }
+
+        return $this->getIngredient()->getName();
+    }
+
+    public function getCategory(): ?Category
+    {
+        if (null === $this->getIngredient()) {
+            return $this->getFreecategory();
+        }
+
+        return $this->getIngredient()->getCategory();
     }
 }

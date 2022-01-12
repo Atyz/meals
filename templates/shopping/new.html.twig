@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un item libre{% endblock %}
+
+{% block body %}
+    <h1 data-tf="shopping.free">
+        Ajouter un item libre
+    </h1>
+
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate',
+        'data-tf': 'shopping.free.form'
+    }}) }}
+        {% include 'shopping/form.html.twig' %}
+
+        <button type="submit" class="btn btn-primary">
+           Ajouter
+        </button>
+
+        <a href="{{ url('shopping', { menu: menu.id }) }}" class="btn btn-secondary">
+            Retour
+        </a>
+    {{ form_end(form) }}
+{% endblock %}

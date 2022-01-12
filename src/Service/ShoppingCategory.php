@@ -18,7 +18,7 @@ class ShoppingCategory
     public function getName()
     {
         if (null === $this->category) {
-            return 'Sans rayon';
+            return 'Autres';
         }
 
         return $this->category->getName();
@@ -28,6 +28,11 @@ class ShoppingCategory
     {
         if (!array_search($shopping, $this->shoppings)) {
             $this->shoppings[] = $shopping;
+
+            uasort($this->shoppings, fn ($shpgA, $shpgB) => strcasecmp(
+                $shpgA->getName(),
+                $shpgB->getName()
+            ));
         }
     }
 

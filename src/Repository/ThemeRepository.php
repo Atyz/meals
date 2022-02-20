@@ -38,4 +38,14 @@ class ThemeRepository extends ServiceEntityRepository
             ->execute()
         ;
     }
+
+    public function findForCloset(): array
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->andWhere('t.user IS NULL')
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }

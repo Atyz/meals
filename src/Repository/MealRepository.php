@@ -9,6 +9,7 @@ use App\Entity\WeekDay;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +20,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MealRepository extends ServiceEntityRepository
 {
+    public const CLOSET_PAGINATOR_PER_PAGE = 50;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Meal::class);
@@ -40,6 +43,37 @@ class MealRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute()
         ;
+    }
+
+    private function addUserParameter(QueryBuilder $builder, User $user = null): QueryBuilder
+    {
+        if (null === $user) {
+            return $builder->andWhere('m.user is null');
+        }
+
+        return $builder
+            ->andWhere('m.user = :user')
+                ->setParameter('user', $user->getId(), 'uuid');
+    }
+
+    public function getPaginator(int $offset, User $user = null, string $search = null): Paginator
+    {
+        $builder = $this
+            ->createQueryBuilder('m')
+            ->addOrderBy('m.name', 'asc')
+            ->setMaxResults(self::CLOSET_PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+        ;
+
+        $builder = $this->addUserParameter($builder, $user);
+
+        if (null !== $search) {
+            $builder
+                ->andWhere('m.name LIKE :search')
+                    ->setParameter('search', '%'.$search.'%');
+        }
+
+        return new Paginator($builder->getQuery());
     }
 
     public function findOneForWeekDayAndDate(

@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Placard communautaire{% endblock %}
+
+{% block body %}
+    <h1 data-tf="closet.meal.list">
+        Placard communautaire
+    </h1>
+
+    <a href="{{ url('home') }}" class="btn btn-secondary">
+        Retour
+    </a>
+
+    <p>
+        <strong>
+            <span data-tf="closet.meal.total">{{ meals|length }}</span> repas
+            {{ null != search ? 'correspondant à la recherche' : '' }}
+            dans le placard communautaire
+        </strong>
+    </p>
+
+    <div>
+        {{ form_start(form, {'attr': {
+            'novalidate': 'novalidate',
+            'data-tf': 'closet.search.form'
+        }}) }}
+            {{ form_row(form.search, {'label': 'Recherche'}) }}
+
+            <button type="submit" class="btn btn-primary">
+                Chercher
+            </button>
+
+            <a href="{{ url('meal_closet') }}" class="btn btn-secondary">
+                Annuler
+            </a>
+        {{ form_end(form) }}
+    </div>
+
+    <ul>
+        {% for meal in meals %}
+            <li data-tf="closet.meal.item">
+                <span data-tf="closet.meal.item.name">{{ meal.name }}</span>
+                <a href="{{ url('meal_add_from_closet', { meal: meal.id }) }}" class="btn btn-warning" title="Ajouter à ses plats">+</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if null != prev %}
+        <a href="{{ url('meal_closet', { 'page': prev, 'search': search }) }}" data-tf="closet.meal.prev">
+            Précédent
+        </a>
+    {% endif %}
+
+    {% if null != next %}
+        <a href="{{ url('meal_closet', { 'page': next, 'search': search }) }}" data-tf="closet.meal.next">
+            Suivant
+        </a>
+    {% endif %}
+{% endblock %}

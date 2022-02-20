@@ -22,7 +22,7 @@ class Theme
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="themes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private User $user;
 

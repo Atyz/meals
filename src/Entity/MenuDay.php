@@ -30,6 +30,7 @@ class MenuDay extends Day
 
     /**
      * @ORM\ManyToOne(targetEntity=Meal::class, inversedBy="menuDays")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $meal;
 

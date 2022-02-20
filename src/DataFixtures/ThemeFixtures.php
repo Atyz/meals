@@ -24,6 +24,21 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
         $user = $this->getReference(UserFixtures::USER_USER_REF);
 
         $themes = [
+            'Légumes' => null,
+            'Féculents' => null,
+            'Viande blanche' => null,
+            'Viande rouge' => null,
+            'Poisson / Crustacés' => null,
+            'Snack / Pizza' => null,
+            'Festif / Exeptionnel' => null,
+        ];
+
+        foreach ($themes as $name => $data) {
+            $theme = (new Theme())->setName($name);
+            $manager->persist($theme);
+        }
+
+        $themes = [
             'Diète maigre' => [
                 'uuid' => self::THEME_DIET_UUID,
                 'ref' => self::THEME_DIET_REF,

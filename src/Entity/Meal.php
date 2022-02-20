@@ -41,10 +41,10 @@ class Meal
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="meals")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @Assert\NotBlank()
      */
-    private User $user;
+    private ?User $user = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -95,6 +95,11 @@ class Meal
         $this->ingredients = new ArrayCollection();
         $this->themes = new ArrayCollection();
         $this->menuDays = new ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        $this->id = Uuid::v6();
     }
 
     public static function getPreparations(): array

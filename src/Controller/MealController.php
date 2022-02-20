@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Meal;
 use App\Form\Meal\MealGenerateType;
 use App\Form\Meal\MealType;
+use App\Form\SearchSimpleType;
+use App\Repository\MealRepository;
 use App\Service\MealManager;
 use App\Service\MealService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -106,6 +108,57 @@ class MealController extends AbstractController
         return $this->render('meal/generate.html.twig', [
             'form' => $form->createView(),
             'totalFields' => MealGenerateType::TOTAL_FIELDS,
+        ]);
+    }
+
+    /**
+     * @Route("/placard-communautaire/{page}/{search}", name="meal_closet")
+     */
+    public function closet(Request $request, MealRepository $repo, int $page = 1, string $search = null): Response
+    {
+        $perPage = MealRepository::CLOSET_PAGINATOR_PER_PAGE;
+        $offset = ($page - 1) * $perPage;
+        $paginator = $repo->getPaginator($offset, null, $search);
+        $lastPage = (int) ($paginator->count() / $perPage) + 1;
+
+        $form = $this->createForm(SearchSimpleType::class, ['search' => $search]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('meal_closet', [
+                'search' => $form->get('search')->getData(),
+                'page' => 1,
+            ]);
+        }
+
+        return $this->render('meal/closet.html.twig', [
+            'meals' => $paginator,
+            'prev' => $page > 1 ? $page - 1 : null,
+            'next' => $page < $lastPage ? $page + 1 : null,
+            'form' => $form->createView(),
+            'search' => $search,
+        ]);
+    }
+
+    /**
+     * @Route("/mes-plats/ajouter-depuis-placard-communautaire/{meal}", name="meal_add_from_closet")
+     */
+    public function addFromCloset(Request $request, Meal $meal, MealManager $manager): Response
+    {
+        $myMeal = clone $meal;
+        $myMeal->setUser($this->getUser());
+
+        $form = $this->createForm(MealType::class, $myMeal);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->save($form->getData());
+
+            return $this->redirectToRoute('meal');
+        }
+
+        return $this->render('meal/closet-add.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

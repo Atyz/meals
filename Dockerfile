@@ -33,12 +33,18 @@ RUN set -eux; \
 		icu-dev \
 		libzip-dev \
 		zlib-dev \
+		freetype-dev \
+		libjpeg-turbo-dev \
+		libpng-dev \
+		libsodium-dev \
 	; \
 	\
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j"$(nproc)" \
 		intl \
+		gd \
 		zip \
+		sodium \
 		pdo \
 		pdo_mysql \
 	; \

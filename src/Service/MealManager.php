@@ -18,7 +18,7 @@ class MealManager
     {
         $entityMgr = $this->doctrine->getManager();
         $entityMgr->persist($meal);
-        $entityMgr->flush();
+        $entityMgr->flush($meal);
 
         return $meal;
     }

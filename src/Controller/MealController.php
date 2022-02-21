@@ -145,8 +145,6 @@ class MealController extends AbstractController
      */
     public function addFromCloset(Request $request, Meal $meal, MealManager $manager): Response
     {
-        dump($meal->getThemes());
-
         $myMeal = clone $meal;
         $myMeal->setUser($this->getUser());
 

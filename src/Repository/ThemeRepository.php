@@ -25,7 +25,7 @@ class ThemeRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('t')
-            ->andWhere('t.user = :user')
+            ->andWhere('t.user = :user OR t.user IS NULL')
                 ->setParameter('user', $user->getId(), 'uuid')
         ;
     }

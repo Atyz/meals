@@ -56,6 +56,24 @@ class MealRepository extends ServiceEntityRepository
                 ->setParameter('user', $user->getId(), 'uuid');
     }
 
+    public function findFilteredQuery(User $user = null, string $search = null): QueryBuilder
+    {
+        $builder = $this
+            ->createQueryBuilder('m')
+            ->addOrderBy('m.name', 'asc')
+        ;
+
+        $builder = $this->addUserParameter($builder, $user);
+
+        if (null !== $search) {
+            $builder
+                ->andWhere('m.name LIKE :search')
+                    ->setParameter('search', '%'.$search.'%');
+        }
+
+        return $builder;
+    }
+
     public function getPaginator(int $offset, User $user = null, string $search = null): Paginator
     {
         $builder = $this

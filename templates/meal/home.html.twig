@@ -56,16 +56,16 @@
         {% endif %}
     {% endif %}
 
-    <ul>
+    <ul class="list-group mt-3">
         {% for meal in meals %}
-            <li data-tf="meal.item">
+            <li class="list-group-item" data-tf="meal.item">
+                <a href="{{ url('meal_edit', { id: meal.id }) }}" class="btn btn-warning">✏️</a>
+                <a href="{{ url('meal_del', { id: meal.id }) }}" class="btn btn-danger">🗑</a>
                 <span data-tf="meal.item.name">{{ meal.name }}</span> /
                 <span data-tf="meal.item.preparation">{{ meal.preparationLabel }}</span> /
                 <span data-tf="meal.item.recurrence">{{ meal.recurrenceLabel }}</span> /
                 <span data-tf="meal.item.ingredients">{{ meal.ingredients|map(ing => ing.name)|join(', ') }}</span> /
-                <span data-tf="meal.item.themes">{{ meal.themes|map(the => the.name)|join(', ') }}</span> |
-                <a href="{{ url('meal_edit', { id: meal.id }) }}" class="btn btn-warning">Modifier</a>
-                <a href="{{ url('meal_del', { id: meal.id }) }}" class="btn btn-danger">Supprimer</a>
+                <span data-tf="meal.item.themes">{{ meal.themes|map(the => the.name)|join(', ') }}</span>
             </li>
         {% endfor %}
     </ul>

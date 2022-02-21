@@ -10,6 +10,7 @@ use App\Repository\MealRepository;
 use App\Service\MealManager;
 use App\Service\MealService;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,12 +115,13 @@ class MealController extends AbstractController
     /**
      * @Route("/placard-communautaire/{page}/{search}", name="meal_closet")
      */
-    public function closet(Request $request, MealRepository $repo, int $page = 1, string $search = null): Response
+    public function closet(Request $request, MealRepository $repo, PaginatorInterface $paginator, int $page = 1, string $search = null): Response
     {
-        $perPage = MealRepository::CLOSET_PAGINATOR_PER_PAGE;
-        $offset = ($page - 1) * $perPage;
-        $paginator = $repo->getPaginator($offset, null, $search);
-        $lastPage = (int) ($paginator->count() / $perPage) + 1;
+        $paging = $paginator->paginate(
+            $repo->findFilteredQuery(null, $search),
+            $page,
+            5
+        );
 
         $form = $this->createForm(SearchSimpleType::class, ['search' => $search]);
         $form->handleRequest($request);
@@ -132,9 +134,7 @@ class MealController extends AbstractController
         }
 
         return $this->render('meal/closet.html.twig', [
-            'meals' => $paginator,
-            'prev' => $page > 1 ? $page - 1 : null,
-            'next' => $page < $lastPage ? $page + 1 : null,
+            'meals' => $paging,
             'form' => $form->createView(),
             'search' => $search,
         ]);

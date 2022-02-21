@@ -13,13 +13,13 @@
 
     <p>
         <strong>
-            <span data-tf="closet.meal.total">{{ meals|length }}</span> repas
+            <span data-tf="closet.meal.total">{{ meals.getTotalItemCount }}</span> repas
             {{ null != search ? 'correspondant à la recherche' : '' }}
             dans le placard communautaire
         </strong>
     </p>
 
-    <div>
+    <div class="mb-3">
         {{ form_start(form, {'attr': {
             'novalidate': 'novalidate',
             'data-tf': 'closet.search.form'
@@ -31,29 +31,21 @@
             </button>
 
             <a href="{{ url('meal_closet') }}" class="btn btn-secondary">
-                Annuler
+                RAZ
             </a>
         {{ form_end(form) }}
     </div>
 
-    <ul>
+    {{ knp_pagination_render(meals) }}
+
+    <ul class="list-group mb-3">
         {% for meal in meals %}
-            <li data-tf="closet.meal.item">
+            <li data-tf="closet.meal.item" class="list-group-item">
+                <a href="{{ url('meal_add_from_closet', { meal: meal.id }) }}" class="btn btn-success" title="Ajouter à ses plats">+</a>
                 <span data-tf="closet.meal.item.name">{{ meal.name }}</span>
-                <a href="{{ url('meal_add_from_closet', { meal: meal.id }) }}" class="btn btn-warning" title="Ajouter à ses plats">+</a>
             </li>
         {% endfor %}
     </ul>
 
-    {% if null != prev %}
-        <a href="{{ url('meal_closet', { 'page': prev, 'search': search }) }}" data-tf="closet.meal.prev">
-            Précédent
-        </a>
-    {% endif %}
-
-    {% if null != next %}
-        <a href="{{ url('meal_closet', { 'page': next, 'search': search }) }}" data-tf="closet.meal.next">
-            Suivant
-        </a>
-    {% endif %}
+    {{ knp_pagination_render(meals) }}
 {% endblock %}

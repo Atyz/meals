@@ -120,7 +120,7 @@ class MealController extends AbstractController
         $paging = $paginator->paginate(
             $repo->findFilteredQuery(null, $search),
             $page,
-            5
+            50
         );
 
         $form = $this->createForm(SearchSimpleType::class, ['search' => $search]);

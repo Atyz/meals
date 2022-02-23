@@ -25,11 +25,22 @@ class ShoppingService
         $entityMgr = $this->doctrine->getManager();
 
         foreach ($menu->getDays() as $day) {
-            if (null === $day->getMeal()) {
-                continue;
+            if (null !== $day->getMeal()) {
+                foreach ($day->getMeal()->getIngredients() as $ingredient) {
+                    if (!$ingredients->contains($ingredient)) {
+                        $ingredients->add($ingredient);
+
+                        $shopping = (new Shopping())
+                            ->setMenu($menu)
+                            ->setIngredient($ingredient)
+                        ;
+
+                        $entityMgr->persist($shopping);
+                    }
+                }
             }
 
-            foreach ($day->getMeal()->getIngredients() as $ingredient) {
+            foreach ($day->getIngredients() as $ingredient) {
                 if (!$ingredients->contains($ingredient)) {
                     $ingredients->add($ingredient);
 

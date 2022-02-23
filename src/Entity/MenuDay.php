@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MenuDayRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
@@ -34,9 +36,15 @@ class MenuDay extends Day
      */
     private $meal;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Ingredient::class)
+     */
+    private Collection $ingredients;
+
     public function __construct(?string $uuid = null)
     {
         $this->id = null !== $uuid ? Uuid::fromString($uuid) : Uuid::v6();
+        $this->ingredients = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -76,6 +84,27 @@ class MenuDay extends Day
     public function setMeal(?Meal $meal): self
     {
         $this->meal = $meal;
+
+        return $this;
+    }
+
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): self
+    {
+        $this->themes->removeElement($ingredient);
 
         return $this;
     }

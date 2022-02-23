@@ -3,23 +3,20 @@
 {% block title %}Mes plats{% endblock %}
 
 {% block body %}
-    <h1 data-tf="theme.list">
+    <h1 data-tf="theme.list" class="display-3 mb-3">
         Mes thèmes
     </h1>
 
     <a href="{{ url('theme_new') }}" class="btn btn-primary">
         Je crée un nouveau thème
     </a>
-    <a href="{{ url('home') }}" class="btn btn-secondary">
-        Retour
-    </a>
 
-    <ul>
+    <ul class="mt-3 list-group">
         {% for theme in themes %}
-            <li data-tf="theme.item">
-                <span data-tf="theme.item.name">{{ theme.name }}</span> /
-                <a href="{{ url('theme_edit', { id: theme.id }) }}" class="btn btn-warning">Modifier</a>
-                <a href="{{ url('theme_del', { id: theme.id }) }}" class="btn btn-danger">Supprimer</a>
+            <li data-tf="theme.item" class="list-group-item">
+                <a href="{{ url('theme_edit', { id: theme.id }) }}" class="btn btn-warning">✏️</a>
+                <a href="{{ url('theme_del', { id: theme.id }) }}" class="btn btn-danger">🗑</a>
+                <span data-tf="theme.item.name">{{ theme.name }}</span>
             </li>
         {% endfor %}
     </ul>

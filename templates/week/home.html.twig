@@ -3,23 +3,20 @@
 {% block title %}Mes semaines types{% endblock %}
 
 {% block body %}
-    <h1 data-tf="week.list">
+    <h1 class="display-3 mb-3" data-tf="week.list">
         Mes semaines types
     </h1>
 
     <a href="{{ url('week_new') }}" class="btn btn-primary">
         Je crée une nouvelle semaine type
     </a>
-    <a href="{{ url('home') }}" class="btn btn-secondary">
-        Retour
-    </a>
 
-    <ul>
+    <ul class="mt-3 list-group">
         {% for week in weeks %}
-            <li data-tf="week.item">
-                <span data-tf="week.item.name">{{ week.name }}</span> /
-                <a href="{{ url('week_edit', { id: week.id }) }}" class="btn btn-warning">Modifier</a>
-                <a href="{{ url('week_del', { id: week.id }) }}" class="btn btn-danger">Supprimer</a>
+            <li data-tf="week.item" class="list-group-item">
+                <a href="{{ url('week_edit', { id: week.id }) }}" class="btn btn-warning">✏️</a>
+                <a href="{{ url('week_del', { id: week.id }) }}" class="btn btn-danger">🗑</a>
+                <span data-tf="week.item.name">{{ week.name }}</span>
             </li>
         {% endfor %}
     </ul>

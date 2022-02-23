@@ -3,8 +3,8 @@
 {% block title %}Mes plats{% endblock %}
 
 {% block body %}
-    <h1 data-tf="meal.list">
-        Mes plats
+    <h1 class="display-3 mb-3" data-tf="meal.list">
+        Mon placard
     </h1>
 
     <a href="{{ url('meal_new') }}" class="btn btn-primary">
@@ -15,9 +15,6 @@
     </a>
     <a href="{{ url('meal_closet') }}" class="btn btn-primary">
         Ajout depuis le placard communautaire
-    </a>
-    <a href="{{ url('home') }}" class="btn btn-secondary">
-        Retour
     </a>
 
     {% if null != generateds %}

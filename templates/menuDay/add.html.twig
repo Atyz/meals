@@ -1,0 +1,28 @@
+<div>
+    {{ form_start(form, {'attr': {
+        'novalidate': 'novalidate',
+        'data-tf': 'menu.form',
+        'data-modal-response-form': 1,
+        'data-modal-response-callback': 'reload',
+        'action': url('menu_day_add', { day: day.id })
+    }}) }}
+        <div class="modal-header">
+            <h5 class="modal-title">Ajouter des éléments</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+            {{ form_row(form.ingredients, {
+                'label': 'Eléments à ajouter',
+                'attr': {
+                    'data-simple-select2': true,
+                    'class': 'w-100',
+            }}) }}
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" data-modal-response-valid>Ajouter</button>
+        </div>
+    {{ form_end(form) }}
+</div>

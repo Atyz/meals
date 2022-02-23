@@ -3,44 +3,32 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1 data-tf="home">
-        1000 <br />
-        MEALS
-    </h1>
 
-    <div class="alert alert-secondary">
-        <h5>Menu</h5>
-        <a href="{{ url('meal') }}">Mon placard</a> |
-        <a href="{{ url('meal_closet') }}">Placard communautaire</a> |
-        <a href="{{ url('week') }}">Mes semaines types</a> |
-        <a href="{{ url('theme') }}">Mes thèmes</a> |
-        <a href="{{ path('logout') }}">Logout</a>
-    </div>
-
-    <div class="alert alert-secondary">
-        <h5>Admin</h5>
-        <a href="{{ url('admin_ingredient') }}">Gestion des ingrédients</a> |
-        <a href="{{ url('admin_category') }}">Gestion des catégories</a> |
-    </div>
 
     <div>
         Bienvenue {{ app.user.email }}
     </div>
 
     <div data-tf="menu.now">
-        <h2>
+        <h2 class="text-center">
             Semaine <span data-tf="menu.week">{{ navigator.from|date('W') }}</span>
             du {{ navigator.from|date('d/m/Y') }}
             au {{ navigator.to|date('d/m/Y') }}
         </h2>
 
-        <div>
+        <div class="clearfix mb-3">
             {% if navigator.canPrev %}
-                <a href="{{ url('home_date', { date: navigator.prev|date('Y-m-d') }) }}" data-tf="menu.prev.week">Semaine précédente</a>
+                <a
+                    href="{{ url('home_date', { date: navigator.prev|date('Y-m-d') }) }}"
+                    data-tf="menu.prev.week"
+                    class="btn btn-info float-start">Semaine précédente</a>
             {% endif %}
 
             {% if navigator.canNext %}
-                <a href="{{ url('home_date', { date: navigator.next|date('Y-m-d') }) }}" class="ms-2" data-tf="menu.next.week">Semaine suivante</a>
+                <a
+                    href="{{ url('home_date', { date: navigator.next|date('Y-m-d') }) }}"
+                    data-tf="menu.next.week"
+                    class="ms-2 btn btn-info float-end">Semaine suivante</a>
             {% endif %}
         </div>
 
@@ -49,34 +37,72 @@
                 Aucune semaine n'est encore générée !
             </div>
         {% else %}
-            {% for day in menu.days %}
-                <div data-tf="menu.item">
-                    <h4>
-                        {{ day.dayLabel }} : {{ day.timeLabel }}
-                    </h4>
-                    <div>
-                        <span data-tf="menu.item.name">{{ day.meal ? day.meal.name : 'Aucun repas sélectionné !' }}</span>
-                        <a href="{{ url('menu_day_change', { day: day.id }) }}" title="Changer de plat automatiquement">♺</a>
+            <div class="mb-3">
+                <a href="{{ url('shopping', { menu: menu.id }) }}" data-tf="shopping.link" class="btn btn-primary">
+                    Voir la liste de course de cette semaine
+                </a>
+            </div>
 
-                        {% if day.meal %}
-                            <a href="{{ url('menu_day_remove', { day: day.id }) }}"
-                                title="Je ne prévois rien pour ce repas"
-                                data-tf="menu.item.remove">
-                                ✘
-                            </a>
-                        {% endif %}
+            <div class="row">
+                {% for day in menu.days %}
+                    <div class="col-sm-6 mb-3">
+                        <div class="card" data-tf="menu.item">
+                            <div class="card-header">
+                                {{ day.dayLabel }}
+                            </div>
+                            <div class="card-body">
+                                <h5  class="display-8">{{ day.timeLabel }}</h5>
+
+                                <div class="mb-2" data-tf="menu.item.name">
+                                    {{ day.meal ? day.meal.name : 'Aucun repas sélectionné !' }}
+                                </div>
+
+                                {% if 0 < day.ingredients|length %}
+                                    <h6 class="display-10">
+                                        Eléments additionnels
+                                    </h6>
+                                    <div>
+                                        {% for ingredient in day.ingredients %}
+                                            <span class="badge bg-secondary">
+                                                {{ ingredient.name }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                <div class="mt-3">
+                                    <a
+                                        href="{{ url('menu_day_add', { day: day.id }) }}"
+                                        class="btn btn-success"
+                                        title="Ajouter des éléments"
+                                        data-bs-toggle="tooltip"
+                                        data-add-modal>+</a>
+
+                                    <a
+                                        href="{{ url('menu_day_change', { day: day.id }) }}"
+                                        class="btn btn-primary"
+                                        title="Changer de plat automatiquement"
+                                        data-bs-toggle="tooltip">♺</a>
+
+                                    {% if day.meal %}
+                                        <a
+                                            href="{{ url('menu_day_remove', { day: day.id }) }}"
+                                            title="Je ne prévois rien pour ce repas"
+                                            data-tf="menu.item.remove"
+                                            class="btn btn-warning"
+                                            data-bs-toggle="tooltip">✘</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-
-            <a href="{{ url('shopping', { menu: menu.id }) }}" data-tf="shopping.link">
-                Voir la liste de course de cette semaine
-            </a>
+                {% endfor %}
+            </div>
         {% endif %}
 
         {% if false == navigator.isPast() %}
-            <div>
-                <a href="{{ url('menu_generate', { date: navigator.from|date('Y-m-d') }) }}" data-tf="menu.link">
+            <div class="d-grid gap-2 bt-3 bt-3">
+                <a href="{{ url('menu_generate', { date: navigator.from|date('Y-m-d') }) }}" data-tf="menu.link" class="btn btn-primary">
                     Générer le menu de la semaine
                 </a>
             </div>

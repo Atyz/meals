@@ -3,9 +3,13 @@
 {% block title %}Mes plats{% endblock %}
 
 {% block body %}
-    <h1 data-tf="meal.edit">
+    <h1 data-tf="meal.edit" class="display-3 mb-3">
         Modifier mon plat
     </h1>
+
+    <a href="{{ url('meal') }}" class="btn btn-secondary  mb-3">
+        Retour
+    </a>
 
     {{ form_start(form, {'attr': {
         'novalidate': 'novalidate',
@@ -16,9 +20,5 @@
         <button type="submit" class="btn btn-primary">
             Modifier ce plat
         </button>
-
-        <a href="{{ url('meal') }}" class="btn btn-secondary">
-            Retour
-        </a>
     {{ form_end(form) }}
 {% endblock %}

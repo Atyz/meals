@@ -28,7 +28,6 @@ class WeekDayType extends AbstractType
         $builder
             ->add('preparations', ChoiceType::class, [
                 'choices' => Meal::getPreparations(),
-                'expanded' => true,
                 'multiple' => true,
             ])
             ->add('themes', EntityType::class, [

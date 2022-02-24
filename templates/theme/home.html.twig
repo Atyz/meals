@@ -14,9 +14,16 @@
     <ul class="mt-3 list-group">
         {% for theme in themes %}
             <li data-tf="theme.item" class="list-group-item">
-                <a href="{{ url('theme_edit', { id: theme.id }) }}" class="btn btn-warning">✏️</a>
-                <a href="{{ url('theme_del', { id: theme.id }) }}" class="btn btn-danger">🗑</a>
-                <span data-tf="theme.item.name">{{ theme.name }}</span>
+                {% if null != theme.user %}
+                    <a href="{{ url('theme_edit', { id: theme.id }) }}" class="btn btn-warning">✏️</a>
+                    <a href="{{ url('theme_del', { id: theme.id }) }}" class="btn btn-danger">🗑</a>
+                {% else %}
+                    <span class="badge bg-secondary">Communautaire</span>
+                {% endif %}
+
+                <span data-tf="theme.item.name">
+                    {{ theme.name }}
+                </span>
             </li>
         {% endfor %}
     </ul>

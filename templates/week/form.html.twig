@@ -10,14 +10,17 @@
 
     {% for day in form.days %}
         <div class="col-6">
-            <h3>
-                {{ day.vars.value.dayLabel }} /
-                {{ day.vars.value.timeLabel }}
-            </h3>
+            <div class="card mb-3">
+                <div class="card-header text-uppercase">
+                    {{ day.vars.value.dayLabel }}
+                    {{ day.vars.value.timeLabel }}
+                </div>
 
-            {{ form_row(day.themes) }}
-            {{ form_row(day.preparations) }}
-            {{ form_row(day.used) }}
+                <div class="card-body">
+                    {{ form_row(day.themes, { 'attr': { 'data-simple-select2': true } }) }}
+                    {{ form_row(day.preparations, { 'attr': { 'data-simple-select2': true } }) }}
+                </div>
+            </div>
         </div>
     {% endfor %}
 </div>

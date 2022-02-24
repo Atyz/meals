@@ -24,7 +24,7 @@ class Theme
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="themes")
      * @ORM\JoinColumn(nullable=true)
      */
-    private User $user;
+    private ?User $user = null;
 
     /**
      * @ORM\Column(type="string", length=255)

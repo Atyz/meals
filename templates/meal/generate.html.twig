@@ -3,9 +3,13 @@
 {% block title %}Mes plats{% endblock %}
 
 {% block body %}
-    <h1 data-tf="meal.generator">
+    <h1 data-tf="meal.generator" class="display-3 mb-3">
         Générer plusieurs plats
     </h1>
+
+    <a href="{{ url('meal') }}" class="btn btn-secondary mb-3">
+        Retour
+    </a>
 
     {{ form_start(form, {'attr': {
         'novalidate': 'novalidate',
@@ -14,19 +18,22 @@
         {{ form_errors(form) }}
 
         {% for i in 1..totalFields %}
-            {{ form_row(form['ingredient'~i], {'label': 'Ensemble d\'ingrédients n°'~i}) }}
+            {{ form_row(form['ingredient'~i], {'label': 'Ensemble d\'ingrédients n°'~i, 'attr': { 'data-simple-select2': true }}) }}
         {% endfor %}
 
-        {{ form_row(form.preparation, {'label': 'Temps de préparation pour chacun des plats'}) }}
-        {{ form_row(form.recurrence, {'label': 'Recurrence pour chacun des plats'}) }}
-        {{ form_row(form.themes, {'label': 'Themes pour chacun des plats'}) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.preparation, {'label': 'Temps de préparation pour chacun des plats', 'attr': { 'data-simple-select2': true }}) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.recurrence, {'label': 'Recurrence pour chacun des plats', 'attr': { 'data-simple-select2': true }}) }}
+            </div>
+        </div>
+
+        {{ form_row(form.themes, {'label': 'Themes pour chacun des plats', 'attr': { 'data-simple-select2': true }}) }}
 
         <button type="submit" class="btn btn-primary">
             Générer
         </button>
-
-        <a href="{{ url('meal') }}" class="btn btn-secondary">
-            Retour
-        </a>
     {{ form_end(form) }}
 {% endblock %}

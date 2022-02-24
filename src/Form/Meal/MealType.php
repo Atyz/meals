@@ -39,11 +39,9 @@ class MealType extends AbstractType
             ])
             ->add('preparation', ChoiceType::class, [
                 'choices' => Meal::getPreparations(),
-                'expanded' => true,
             ])
             ->add('recurrence', ChoiceType::class, [
                 'choices' => Meal::getRecurrences(),
-                'expanded' => true,
             ])
             ->add('themes', EntityType::class, [
                 'class' => Theme::class,

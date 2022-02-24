@@ -21,22 +21,26 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $nlg = new User();
+        $nlg->setEmail('nlg@meals.fr');
+        $nlg->setPassword($this->passwordHasher->hashPassword($nlg, '93160'));
+        $manager->persist($nlg);
+
+        $bsm = new User();
+        $bsm->setEmail('bsm@meals.fr');
+        $bsm->setPassword($this->passwordHasher->hashPassword($bsm, '77600'));
+        $manager->persist($bsm);
+
         $atyz = new User();
         $atyz->setEmail('atyz@meals.fr');
-        $atyz->setPassword($this->passwordHasher->hashPassword(
-            $atyz,
-            '123'
-        ));
+        $atyz->setPassword($this->passwordHasher->hashPassword($atyz, '123'));
+        $manager->persist($atyz);
 
         $user = new User();
         $user->setEmail('user@meals.fr');
-        $user->setPassword($this->passwordHasher->hashPassword(
-            $user,
-            '456'
-        ));
-
-        $manager->persist($atyz);
+        $user->setPassword($this->passwordHasher->hashPassword($user, '456'));
         $manager->persist($user);
+
         $manager->flush();
 
         $this->addReference(self::ATYZ_USER_REF, $atyz);

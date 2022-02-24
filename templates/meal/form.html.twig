@@ -1,5 +1,11 @@
 {{ form_row(form.name, {'label': 'Nom'}) }}
-{{ form_row(form.preparation, {'label': 'Temps de préparation'}) }}
-{{ form_row(form.recurrence, {'label': 'Recurrence'}) }}
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.preparation, {'label': 'Temps de préparation', 'attr': { 'data-simple-select2': true }}) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.recurrence, {'label': 'Recurrence', 'attr': { 'data-simple-select2': true }}) }}
+    </div>
+<div>
 {{ form_row(form.ingredients, {'label': 'Ingrédients', 'attr': { 'data-simple-select2': true }}) }}
 {{ form_row(form.themes, {'label': 'Thèmes', 'attr': { 'data-simple-select2': true }}) }}

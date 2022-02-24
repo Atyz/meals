@@ -3,9 +3,13 @@
 {% block title %}Mes semaines types{% endblock %}
 
 {% block body %}
-    <h1 data-tf="week.new">
+    <h1 class="display-3 mb-3" data-tf="week.new">
         Ma nouvelle semaine type
     </h1>
+
+    <a href="{{ url('week') }}" class="mb-3 btn btn-secondary">
+        Retour
+    </a>
 
     {{ form_start(form, {'attr': {
         'novalidate': 'novalidate',
@@ -16,9 +20,5 @@
         <button type="submit" class="btn btn-primary">
             Ajouter cette semaine type
         </button>
-
-        <a href="{{ url('week') }}" class="btn btn-secondary">
-            Retour
-        </a>
     {{ form_end(form, { 'render_rest': false }) }}
 {% endblock %}

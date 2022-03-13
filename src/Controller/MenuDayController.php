@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Menu;
 use App\Entity\MenuDay;
 use App\Form\Menu\MenuDayIngredientType;
+use App\Form\Menu\MenuDayMealType;
 use App\Service\MenuDayService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +24,29 @@ class MenuDayController extends AbstractController
 
         return $this->redirectToRoute('home_date', [
             'date' => $day->getMenu()->getDate()->format('Y-m-d'),
+        ]);
+    }
+
+    /**
+     * @Route("/repas/choisir-un-plat/{day}", name="menu_day_choose")
+     */
+    public function choose(
+        Request $request,
+        MenuDay $day,
+        MenuDayService $service
+    ): Response {
+        $form = $this->createForm(MenuDayMealType::class, $day);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $service->save($form->getData());
+
+            return new JsonResponse('ok');
+        }
+
+        return $this->render('menuDay/choose.html.twig', [
+            'day' => $day,
+            'form' => $form->createView(),
         ]);
     }
 

@@ -84,6 +84,13 @@
                                         title="Changer de plat automatiquement"
                                         data-bs-toggle="tooltip">♺</a>
 
+                                    <a
+                                        href="{{ url('menu_day_choose', { day: day.id }) }}"
+                                        class="btn btn-primary"
+                                        title="Choisir un plat manuellement"
+                                        data-bs-toggle="tooltip"
+                                        data-add-modal>☆</a>
+
                                     {% if day.meal %}
                                         <a
                                             href="{{ url('menu_day_remove', { day: day.id }) }}"

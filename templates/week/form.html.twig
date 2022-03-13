@@ -11,9 +11,14 @@
     {% for day in form.days %}
         <div class="col-6">
             <div class="card mb-3">
-                <div class="card-header text-uppercase">
-                    {{ day.vars.value.dayLabel }}
-                    {{ day.vars.value.timeLabel }}
+                <div class="card-header text-uppercase d-flex justify-content-between">
+                    <div>
+                        {{ day.vars.value.dayLabel }}
+                        {{ day.vars.value.timeLabel }}
+                    </div>
+                    <div>
+                        {{ form_widget(day.used, { 'label': false }) }}
+                    </div>
                 </div>
 
                 <div class="card-body">

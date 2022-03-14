@@ -2,10 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\Ingredient;
 use App\Entity\Menu;
 use App\Entity\Shopping;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ShoppingService
@@ -16,45 +14,6 @@ class ShoppingService
     {
         $this->doctrine = $doctrine;
         $this->shoppingRepo = $this->doctrine->getRepository(Shopping::class);
-        $this->ingredientRepo = $this->doctrine->getRepository(Ingredient::class);
-    }
-
-    public function build(Menu $menu): void
-    {
-        $ingredients = new ArrayCollection($this->ingredientRepo->findForMenuInShopping($menu));
-        $entityMgr = $this->doctrine->getManager();
-
-        foreach ($menu->getDays() as $day) {
-            if (null !== $day->getMeal()) {
-                foreach ($day->getMeal()->getIngredients() as $ingredient) {
-                    if (!$ingredients->contains($ingredient)) {
-                        $ingredients->add($ingredient);
-
-                        $shopping = (new Shopping())
-                            ->setMenu($menu)
-                            ->setIngredient($ingredient)
-                        ;
-
-                        $entityMgr->persist($shopping);
-                    }
-                }
-            }
-
-            foreach ($day->getIngredients() as $ingredient) {
-                if (!$ingredients->contains($ingredient)) {
-                    $ingredients->add($ingredient);
-
-                    $shopping = (new Shopping())
-                        ->setMenu($menu)
-                        ->setIngredient($ingredient)
-                    ;
-
-                    $entityMgr->persist($shopping);
-                }
-            }
-        }
-
-        $entityMgr->flush();
     }
 
     public function findForMenu(Menu $menu): array
@@ -72,5 +31,25 @@ class ShoppingService
         }
 
         return $list;
+    }
+
+    public function transferFreeItems(Menu $from, Menu $to): void
+    {
+        foreach ($from->getShoppings() as $shopping) {
+            if (!$shopping->isFree()) {
+                continue;
+            }
+
+            $free = (new Shopping())
+                ->setMenu($to)
+                ->setFreename($shopping->getFreename())
+                ->setFreecategory($shopping->getFreecategory())
+                ->setStatus($shopping->getStatus())
+            ;
+
+            $this->doctrine->getManager()->persist($free);
+        }
+
+        $this->doctrine->getManager()->flush();
     }
 }

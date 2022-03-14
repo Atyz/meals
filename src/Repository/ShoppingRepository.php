@@ -34,4 +34,18 @@ class ShoppingRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function cleanForMenuByIds(Menu $menu, array $ids)
+    {
+        return $this
+            ->createQueryBuilder('s')
+            ->delete()
+            ->andWhere('s.menu = :menu')
+                ->setParameter('menu', $menu->getId(), 'uuid')
+            ->andWhere('s.ingredient IN (:ids)')
+                ->setParameter('ids', $ids)
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }

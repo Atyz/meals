@@ -13,25 +13,24 @@ class MenuService
     private MenuManager $manager;
     private MenuDayService $menuDayService;
     private MenuRepository $menuRepo;
+    private ShoppingService $shoppingService;
 
     public function __construct(
         ManagerRegistry $doctrine,
         MenuManager $manager,
-        MenuDayService $menuDayService
+        MenuDayService $menuDayService,
+        ShoppingService $shoppingService
     ) {
         $this->doctrine = $doctrine;
         $this->manager = $manager;
         $this->menuDayService = $menuDayService;
+        $this->shoppingService = $shoppingService;
         $this->menuRepo = $this->doctrine->getRepository(Menu::class);
     }
 
     public function generate(Menu $menu): Menu
     {
         $existing = $this->menuRepo->findForUserOn($menu->getUser(), $menu->getDate());
-
-        if (null !== $existing) {
-            $this->manager->del($existing);
-        }
 
         $week = $menu->getWeek();
         $excluded = [];
@@ -49,7 +48,14 @@ class MenuService
             $menu->addDay($menuDay);
         }
 
-        return $this->manager->save($menu);
+        $this->manager->save($menu);
+
+        if (null !== $existing) {
+            $this->shoppingService->transferFreeItems($existing, $menu);
+            $this->manager->del($existing);
+        }
+
+        return $menu;
     }
 
     public function findOn(User $user, \DateTime $date): ?Menu

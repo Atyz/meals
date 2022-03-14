@@ -6,6 +6,7 @@ use App\Entity\Menu;
 use App\Entity\Shopping;
 use App\Form\Shopping\FreeShoppingType;
 use App\Service\MenuNavigator;
+use App\Service\ShoppingBuilder;
 use App\Service\ShoppingManager;
 use App\Service\ShoppingService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,9 +22,12 @@ class ShoppingController extends AbstractController
     public function home(
         Menu $menu,
         ShoppingService $service,
+        ShoppingBuilder $builder,
         MenuNavigator $navigator
     ): Response {
-        $service->build($menu);
+        $builder->setMenu($menu);
+        $builder->build();
+
         $navigator->setBaseDate($menu->getDate());
 
         return $this->render('shopping/home.html.twig', [

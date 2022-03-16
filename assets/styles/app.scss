@@ -10,3 +10,52 @@ body {
         width: 100% !important;
     }
 }
+
+.shopping-items {
+    padding: 0;
+    margin: 0;
+
+    .shopping-item {
+        list-style-type: none;
+
+        a {
+            display: block;
+            width: 75px;
+            height: 75px;
+            border-radius: 5px;
+            border: 2px solid #333;
+            background: #eee;
+            color: #000;
+            float: left;
+            margin: 10px 10px 10px 0;
+            padding: 10px;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.9em;
+            line-height: 1em;
+
+            &.free-item {
+                border: 2px dotted #333;
+            }
+        }
+    }
+}
+
+.totake {
+    .shopping-item {
+        a {
+            background: skyblue;
+        }
+    }
+}
+
+.taken {
+    .shopping-item {
+        a {
+            background: plum;
+        }
+    }
+}

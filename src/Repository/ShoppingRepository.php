@@ -20,12 +20,14 @@ class ShoppingRepository extends ServiceEntityRepository
         parent::__construct($registry, Shopping::class);
     }
 
-    public function findForMenu(Menu $menu)
+    public function findForMenu(Menu $menu, int $status = Shopping::STATUS_TO_TAKE)
     {
         return $this
             ->createQueryBuilder('s')
             ->leftJoin('s.ingredient', 'i')
             ->leftJoin('i.category', 'c')
+            ->andWhere('s.status = :status')
+                ->setParameter('status', $status)
             ->andWhere('s.menu = :menu')
                 ->setParameter('menu', $menu->getId(), 'uuid')
             ->addOrderBy('c.name', 'asc')

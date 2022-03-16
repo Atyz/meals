@@ -16,11 +16,11 @@ class ShoppingService
         $this->shoppingRepo = $this->doctrine->getRepository(Shopping::class);
     }
 
-    public function findForMenu(Menu $menu): array
+    public function findForMenu(Menu $menu, int $status = Shopping::STATUS_TO_TAKE)
     {
         $list = [];
 
-        foreach ($this->shoppingRepo->findForMenu($menu) as $shopping) {
+        foreach ($this->shoppingRepo->findForMenu($menu, $status) as $shopping) {
             $key = null !== $shopping->getCategory() ? $shopping->getCategory()->getId()->toRfc4122() : -1;
 
             if (!array_key_exists($key, $list)) {
@@ -31,6 +31,16 @@ class ShoppingService
         }
 
         return $list;
+    }
+
+    public function findToTakesForMenu(Menu $menu): array
+    {
+        return $this->findForMenu($menu);
+    }
+
+    public function findTakensForMenu(Menu $menu): array
+    {
+        return $this->findForMenu($menu, Shopping::STATUS_TAKEN);
     }
 
     public function transferFreeItems(Menu $from, Menu $to): void

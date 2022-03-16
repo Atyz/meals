@@ -1,0 +1,21 @@
+
+{% for category in categories %}
+    <h5 data-tf="shopping.category" data-idx="{{ loop.index }}" class="clearfix">
+        {{ category.name }}
+    </h5>
+
+    <ul class="clearfix shopping-items">
+        {% for shopping in category.shoppings %}
+            <li data-tf="shopping.item" class="shopping-item">
+                {% set route = shopping.isToTake ? 'shopping_take' : 'shopping_untake'  %}
+                <a href="{{ url(route, { shopping: shopping.id }) }}"
+                    data-tf="shopping.take"
+                    class="{% if shopping.isFree %}free-item{% endif %}"
+                    {% if shopping.isFree %}data-free="{{ url('shopping_edit', { shopping: shopping.id }) }}"{% endif %}
+                >
+                    <span>{{ shopping.name }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}

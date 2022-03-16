@@ -31,7 +31,8 @@ class ShoppingController extends AbstractController
         $navigator->setBaseDate($menu->getDate());
 
         return $this->render('shopping/home.html.twig', [
-            'shpCategories' => $service->findForMenu($menu),
+            'toTakes' => $service->findToTakesForMenu($menu),
+            'takens' => $service->findTakensForMenu($menu),
             'navigator' => $navigator,
             'menu' => $menu,
         ]);
@@ -95,6 +96,7 @@ class ShoppingController extends AbstractController
 
         return $this->render('shopping/edit.html.twig', [
             'form' => $form->createView(),
+            'shopping' => $shopping,
             'menu' => $menu,
         ]);
     }

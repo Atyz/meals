@@ -3,46 +3,41 @@
 {% block title %}Ma liste de courses{% endblock %}
 
 {% block body %}
-    <h1 data-tf="shopping.list">
+    <h1 class="display-3 mb-3" data-tf="meal.list">
         Ma liste de courses
     </h1>
 
-    <h3 data-tf="shopping.now">
+    <h5 class="display-6 mb-3">
         Semaine {{ navigator.from|date('W') }}
         du {{ navigator.from|date('d/m/Y') }}
         au {{ navigator.to|date('d/m/Y') }}
-    </h3>
+    </h5>
 
-    <a href="{{ url('home_date', { date: navigator.from|date('Y-m-d') }) }}" class="btn btn-secondary">
-        Retour
-    </a>
+    <p>
+        <em>Double-cliquez sur les éléments ajoutés manuellement pour les éditer ou les supprimer.</em>
+    </p>
 
-    {% for category in shpCategories %}
-        <h4 data-tf="shopping.category" data-idx="{{ loop.index }}">
-            {{ category.name }}
-        </h4>
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between">
+            A prendre
 
-        <ul>
-            {% for shopping in category.shoppings %}
-                <li data-tf="shopping.item">
-                    <span>{{ shopping.name }}</span>
-
-                    {% if shopping.isToTake %}
-                        <a href="{{ url('shopping_take', { shopping: shopping.id }) }}" data-tf="shopping.take">Take</a>
-                    {% else %}
-                        <a href="{{ url('shopping_untake', { shopping: shopping.id }) }}" data-tf="shopping.untake">Untake</a>
-                    {% endif %}
-
-                    {% if shopping.isFree %}
-                        <a href="{{ url('shopping_edit', { shopping: shopping.id }) }}" data-tf="shopping.edit">✎</a>
-                        <a href="{{ url('shopping_del', { shopping: shopping.id }) }}" data-tf="shopping.del">✘</a>
-                    {% endif %}
+            <ul class="nav nav-pills card-header-pills ">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url('shopping_new', { menu: menu.id }) }}">+</a>
                 </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
+            </ul>
+        </div>
+        <div class="card-body totake">
+            {% include 'shopping/item-list.html.twig' with { 'categories': toTakes } only %}
+        </div>
+    </div>
 
-    <a href="{{ url('shopping_new', { menu: menu.id }) }}">
-        Ajouter un item
-    </a>
+    <div class="card">
+        <div class="card-header">
+            Déjà pris
+        </div>
+        <div class="card-body taken">
+            {% include 'shopping/item-list.html.twig' with { 'categories': takens } only %}
+        </div>
+    </div>
 {% endblock %}

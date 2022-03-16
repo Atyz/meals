@@ -12,6 +12,27 @@ import { Modal } from './components/Modal.js';
 
 $(function() {
     new Modal();
+
+    var counter = 0;
+    var singleClickTimer;
+
+    $('[data-free]').on('click', function(event) {
+        event.preventDefault();
+        counter++;
+
+        if (counter === 1) {
+            let href = $(this).attr('href');
+            singleClickTimer = setTimeout(function() {
+                counter = 0;
+                return location.href = href;
+            }, 300);
+        } else if (counter === 2) {
+            clearTimeout(singleClickTimer);
+            counter = 0;
+            return location.href = $(this).data('free');
+        }
+    });
+
     $('[data-simple-select2]').each(function () {
         $(this).select2();
     });

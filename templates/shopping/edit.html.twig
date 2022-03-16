@@ -3,7 +3,7 @@
 {% block title %}Modifier l'item{% endblock %}
 
 {% block body %}
-    <h1 data-tf="shopping.free">
+    <h1 class="display-3 mb-3" data-tf="shopping.free">
         Modifier l'item
     </h1>
 
@@ -16,6 +16,10 @@
         <button type="submit" class="btn btn-primary">
            Modifier
         </button>
+
+        <a href="{{ url('shopping_del', { shopping: shopping.id }) }}" class="btn btn-danger">
+            Supprimer
+        </a>
 
         <a href="{{ url('shopping', { menu: menu.id }) }}" class="btn btn-secondary">
             Retour

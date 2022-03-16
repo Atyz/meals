@@ -54,7 +54,6 @@ class MealGenerateType extends AbstractType
         $builder
             ->add('preparation', ChoiceType::class, [
                 'choices' => Meal::getPreparations(),
-                'expanded' => true,
                 'constraints' => [new NotBlank(
                     null,
                     'Merci d\'indiquer un temps de préparation.'

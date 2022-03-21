@@ -63,7 +63,7 @@ abstract class Day
     {
         return [
             self::TIME_LUNCH => 'déjeuner',
-            self::TIME_DINNER => 'dînner',
+            self::TIME_DINNER => 'dîner',
         ];
     }
 
